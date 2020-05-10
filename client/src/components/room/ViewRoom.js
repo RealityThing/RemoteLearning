@@ -552,6 +552,11 @@ class CreateRoom extends Component {
     // }
 
     selectChallenge = challenge => {
+        if (challenge && window.location.hostname !== "localhost") {
+            challenge.question = ''
+            challenge.answer = ''
+            challenge.choices = []
+        }
         this.setState({ errors: {}, challenge: {...challenge, owner: this.state.socket.id}, challengeStatus: challenge == null ? 'wait' : 'edit' })
     }
 

@@ -110,14 +110,16 @@ app.get('/api/room/:roomId/:userId', (req, res) => {
 
 server.listen(port, () => console.log(`Server running on ${port}`));
 
+
 // Serve static assets if in production
 // Set static folder
-app.use(express.static('client/build'));
+if (process.env.NODE_ENV === 'production') {
+    app.use(express.static('client/build'));
 
-app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
-});
-
+    app.get('*', (req, res) => {
+        res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+    });
+}
 
 // The client can listen for the event with the on() method! Once the connection is open, the frontend can receive updates without refreshing the page.
 
