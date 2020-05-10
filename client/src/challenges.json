@@ -6,8 +6,8 @@
         "description": "Ask the students a question and they will answer it.",
         "type": "Q&A",
 
-        "question": "What is the name of the Greek dip consisting of yoghurt and cucumber?",
-        "answer": "Tzatziki",
+        "question": "Which country has the longest coastline in the world?",
+        "answer": "Canada",
         "info": "",
         
         "timer": 10,
@@ -22,9 +22,9 @@
 
         "type": "MC",
 
-        "question": "Which of the following geological eras came first",
-        "answer": "Paleozoic",
-        "choices": ["Mesozoic", "Paleozoic", "Cenozoic"],
+        "question": "How many stars are there in the European flag?",
+        "answer": "12",
+        "choices": ["10", "12", "15", "18"],
         "choice": "",
         "info": "",
 

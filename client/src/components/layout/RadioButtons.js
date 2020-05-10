@@ -13,7 +13,7 @@ const RadioButtons = ({
             disabled,
             selectedChoice
         }) => {
-            console.log(selectedChoice, choices)
+
     return (
         <div className="input-field">
             <div className="row center">

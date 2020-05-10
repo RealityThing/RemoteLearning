@@ -9,7 +9,7 @@ export default () => {
                 <span className="small-text">@ 2020 Remote Learning </span>
             
             <div className="right">
-                <span className="small-text"> Developed by RealityThing </span>
+                <span className="small-text"> Developed by <b>RealityThing</b> </span>
             </div>
         </div>
     )

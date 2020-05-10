@@ -159,7 +159,7 @@ io.on('connect', socket => {
      socket.on('send-message', data => {
         let roomId = getRoomId()
         let messageObj = { id: socket.id, username: socket.username, message: data };
-        roomId && io.sockets.to(roomId).emit('new-message', messageObj) // emit sends message to all users, this will emit to all connected sockets
+        roomId && socket.to(roomId).broadcast.emit('new-message', messageObj) // emit sends message to all users, this will emit to all connected sockets
     })
 
     socket.on('new-challenge', challenge => {

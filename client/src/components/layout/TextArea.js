@@ -10,22 +10,25 @@ const TextArea = ({
                             placeholder,
                             classes,
                             value,
+                            noValidate,
                             icon,
                             label,
                             error,
                             info,
                             infoClass,
                             onChange,
-                            disabled
+                            disabled,
+                            onKeyPress
                         }) => {
     return (
         <div className="input-field">
             {icon && <i className="material-icons prefix">{icon}</i>}
             <textarea
-                className={`materialize-textarea validate ${classes}`}
+                className={`materialize-textarea ${noValidate ? '' : 'validate'} ${classes}`}
                 placeholder={placeholder}
                 id={name}
                 name={name}
+                onKeyPress={onKeyPress}
                 disabled={disabled}
                 value={value}
                 onChange={onChange}

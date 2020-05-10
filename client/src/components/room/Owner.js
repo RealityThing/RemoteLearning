@@ -10,7 +10,7 @@ import RadioButtons from '../layout/RadioButtons';
 class Owner extends React.Component {
 
     render () {
-        const { myId, users, room, challenge, errors, countDown,clearChoices, addChoice, showChallenges, challengeStatus, selectChallenge, onEditChallenge, startChallenge, setChallengeStatus } = this.props;
+        const { myId, users, room, challenge, errors, countDown,clearChallenge, addChoice, showChallenges, challengeStatus, selectChallenge, onEditChallenge, startChallenge, setChallengeStatus } = this.props;
         return (
             <>
                 { challengeStatus == 'wait' && showChallenges ? (
@@ -48,13 +48,17 @@ class Owner extends React.Component {
                                                     error={errors.choice}
                                                     value={challenge.choice}
                                                     onChange={onEditChallenge}
+                                                    onKeyPress={e => {
+                                                        if (e.which === 13) {
+                                                            e.preventDefault();
+                                                            addChoice();
+                                                        }
+                                                    }}
                                                 />
                                             </div>
                                             <div className="col">
                                                 <button onClick={addChoice} className="btn btnt btn-small"> Add choice</button>
                                             </div>
-                                            <br/>
-                                            <a onClick={clearChoices} href="javascript:void(0);" className="link-dash">Clear</a>
                                         </div>
                                         <RadioButtons 
                                             selectedChoice={challenge.answer}
@@ -88,12 +92,17 @@ class Owner extends React.Component {
                                     </div>
                                 </div>
                                 <div className="col">
-                                    <input onClick={startChallenge} type="submit" value="Begin Challenge" className="btn btn-primary"/>
+                                    <input onClick={startChallenge} type="submit" value="Begin Challenge" className="btn green"/>
                                 </div>
 
                                 <div className="col">
-                                    <button className="btn btn-primary" onClick={() => selectChallenge(null)}>Cancel</button>
+                                    <button className="btn red lighten-1" onClick={() => selectChallenge(null)}>Cancel</button>
                                 </div>
+                                
+                                <div className="col">
+                                    <a onClick={clearChallenge} href="javascript:void(0);" className="btn grey">Clear All</a>
+                                </div>
+
                             </form>
                         </>
                     ) : challengeStatus == 'start' ? (
@@ -115,7 +124,7 @@ class Owner extends React.Component {
                         // once timer has reached zero, display the answer the results of all students to everyone
                         <>
                             <Results myId={myId} users={users} challenge={challenge} />
-                            <button className="btn btn-primary" onClick={() => setChallengeStatus('wait')}>New Challenge</button>
+                            <button className="btn" onClick={() => setChallengeStatus('wait')}>New Challenge</button>
                         </>
                     ) : null
                 }

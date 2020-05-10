@@ -38,9 +38,15 @@ class Participant extends React.Component {
                                                 disabled={answerSent}
                                                 error={errors.studentAnswer}
                                                 value={challenge.studentAnswer}
+                                                noValidate={true}
                                                 info={answerSent ? 'Your answer has been recorded.' : false}
                                                 infoClass='me'
                                                 onChange={e => onEditChallenge(e, 'participant')}
+                                                onKeyPress={e => {
+                                                    if (e.which === 13) {
+                                                        sendAnswer(e);
+                                                    }
+                                                }}
                                             />  
                                         ) : (
                                             <div className="row center">
