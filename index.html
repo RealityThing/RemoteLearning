@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+    <head>
+        <title>IO chatApp</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+
+    <style>
+
+        body {
+            text-align: center;
+            margin-top: 25px;
+
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            margin-top: 5px;
+        }
+        #messageArea {
+            display: none;
+        }
+    </style>
+    <body>
+        <div class="container">
+            <div id="newUserArea" class="row">
+                <div class="col-12-md">
+                    <form id="newUserForm">
+                        <div class="form-group">
+                            <label>New user</label>
+                            <input class="form-control" id="username" />
+                            <input type="submit" class="btn btn-primary" value="Login" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div id="messageArea"  class="row">
+                <div class="col-md-4">
+                    <div class="well">
+                        <h3>Online users</h3>
+                        <ul class="list-group" id="users"></ul>
+                    </div>
+                </div>
+            
+                <div class="col-md-8">
+                    <div class="chat" id="chat"></div>
+        
+                    <form id="messageForm">
+                        <div class="form-group">
+                            <input class="form-control" id="message"/>
+                            <input type="submit" class="btn btn-primary" value="Send Message" />
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            $(function(){
+                var socket = io.connect();
+
+                var $newUserArea = $('#newUserArea')
+                var $messageArea = $('#messageArea')
+
+                var $users = $('#users');
+                var $chat = $('#chat');
+
+                var $messageForm = $('#messageForm');
+                var $message = $('#message');
+
+                var $newUserForm = $('#newUserForm');
+                var $username = $('#username');
+
+                $newUserForm.submit(e => {
+                    e.preventDefault();
+                    console.log($username.val())
+                    socket.emit('new-user', $username.val(), data => {
+                        if (data) {
+                            $newUserArea.hide()
+                            $messageArea.show()
+                        }
+                    })
+                });
+
+                $messageForm.submit(e => {
+                    e.preventDefault();
+                    console.log($message.val())
+                    socket.emit('send-message', $message.val())
+                    $message.val('');
+                });
+               
+                socket.on('new-message', data => {
+                    $chat.append(`<div class="well"><strong>${data.user}</strong>: ${data.message}</div>`)
+                })
+
+                socket.on('get-users', users => {
+                    var html = '';
+                    users.forEach(user => {
+                        html += `<li class="list-group-item">${user}</li>`
+                    });
+                    $users.append(html);
+                })
+
+                socket.on('user-joined', user => {
+                    $chat.append(`<div class="well">${user} has joined </div>`)
+                })
+
+                socket.on('user-left', user => {
+                    $chat.append(`<div class="well">${user} has left the room </div>`)
+                })
+            });
+        </script>
+
+    </body>
+
+</html>

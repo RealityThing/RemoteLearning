@@ -1,0 +1,35 @@
+[
+    {
+        "id": 1,
+
+        "name": "Question and Answer",
+        "description": "Ask the students a question and they will answer it.",
+        "type": "Q&A",
+
+        "question": "What is the name of the Greek dip consisting of yoghurt and cucumber?",
+        "answer": "Tzatziki",
+        "info": "",
+        
+        "timer": 10,
+        "studentAnswer": "",
+        "participants": []
+    },
+    {
+        "id": 2,
+
+        "name": "Multiple Choice",
+        "description": "Give the students options to answer a question.",
+
+        "type": "MC",
+
+        "question": "Which of the following geological eras came first",
+        "answer": "Paleozoic",
+        "choices": ["Mesozoic", "Paleozoic", "Cenozoic"],
+        "choice": "",
+        "info": "",
+
+        "timer": 10,
+        "studentAnswer": "",
+        "participants": []
+    }
+]
