@@ -27,7 +27,7 @@ import ChangeUsername from './ChangeUsername';
         streamId
     }
 */
-const HOST = 'http://remotelearning.space' // 'http://remotelearning.space/
+const HOST = 'https://remotelearning.space'
 var streams = {};
 var hasReceived = false;
 
@@ -816,7 +816,7 @@ class CreateRoom extends Component {
                             <div className="row">
                                 <div className="col s8 mainArea">
                                     <div className="center">
-                                        { isOwner ? <Owner challenge={challenge} errors={errors} addChoice={this.addChoice} clearChallenge={this.clearChallenge} room={room} showChallenges={showChallenges} myId={socket && socket.id} users={users} countDown={countDown} challengeStatus={challengeStatus} selectChallenge={this.selectChallenge} onEditChallenge={this.onEditChallenge} startChallenge={this.startChallenge} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
+                                        { isOwner ? <Owner challenge={challenge} HOST={HOST} errors={errors} addChoice={this.addChoice} clearChallenge={this.clearChallenge} room={room} showChallenges={showChallenges} myId={socket && socket.id} users={users} countDown={countDown} challengeStatus={challengeStatus} selectChallenge={this.selectChallenge} onEditChallenge={this.onEditChallenge} startChallenge={this.startChallenge} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
                                             : <Participant challenge={challenge} errors={errors} answerSent={answerSent} sendAnswer={this.sendAnswer} myId={socket && socket.id} users={users} onEditChallenge={this.onEditChallenge} countDown={countDown} challengeStatus={challengeStatus} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
                                         }
                                     </div>

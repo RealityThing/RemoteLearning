@@ -10,7 +10,7 @@ import RadioButtons from '../layout/RadioButtons';
 class Owner extends React.Component {
 
     render () {
-        const { myId, users, room, challenge, errors, countDown,clearChallenge, addChoice, showChallenges, challengeStatus, selectChallenge, onEditChallenge, startChallenge, setChallengeStatus } = this.props;
+        const { HOST, myId, users, room, challenge, errors, countDown,clearChallenge, addChoice, showChallenges, challengeStatus, selectChallenge, onEditChallenge, startChallenge, setChallengeStatus } = this.props;
         return (
             <>
                 { challengeStatus == 'wait' && showChallenges ? (
@@ -133,7 +133,7 @@ class Owner extends React.Component {
                     <div className="send-link-section">
                         <span>Send this link to your students so they can join the room.</span>
                         <br/>
-                        <a className="link" target="_blank" href={`http://localhost:3000/room/${room._id}`}>{`http://learningtogether.com/room/${room._id}`}</a>
+                        <a className="link" target="_blank" href={`${HOST}/room/${room._id}`}>{`${HOST}/room/${room._id}`}</a>
                     </div>  
                 ) : null }
             </>
