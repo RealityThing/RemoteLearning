@@ -27,7 +27,7 @@ import ChangeUsername from './ChangeUsername';
         streamId
     }
 */
-const HOST = 'https://remotelearning.space'
+const HOST = 'https://www.remotelearning.space'
 var streams = {};
 var hasReceived = false;
 
@@ -390,7 +390,7 @@ class CreateRoom extends Component {
         let { messages } = this.state;
         let name = this.getOwner('name');
         if (name) {
-            let msg = <div className="small-text"><strong className="owner">{name}</strong> is the owner</div>
+            let msg = <div className="small-text"><strong className="owner">{name}</strong> created the room</div>
             let msgs = [...messages]
             msgs[0] = msg;
             console.log(msgs)
@@ -777,7 +777,7 @@ class CreateRoom extends Component {
                         <div className="col s8 nav">
                             <div className="row">
                                 <div className="col s3 m6 l8">
-                                    <h4>{room.name}</h4>
+                                    <h4>Room: {room.name}</h4>
                                     <span>Hi {username} </span>
                                     <div>
                                         <a className="link-dash" onClick={() => this.setState({ changeUsername: true })} href="javascript:void(0);">Change username</a>

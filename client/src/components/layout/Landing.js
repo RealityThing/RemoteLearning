@@ -7,6 +7,7 @@ import axios from 'axios'
 import isEmpty from '../../utils/is-empty'
 import '../../styles/main.css'
 import logo from '../../assets/logo.png'
+import Spinner from '../layout/Spinner';
 
 class Landing extends Component {
 
@@ -15,7 +16,8 @@ class Landing extends Component {
         this.state = {
             roomId: '',
             errors: {},
-            id: false
+            id: false,
+            loading: false
         }
     }
 
@@ -35,16 +37,19 @@ class Landing extends Component {
             return;
         }
         id = id ? id : 'none'
+        this.setState({ loading: true });
+
         // call api to check if room exists
         axios.get(`/api/room/${roomId}/${id}`)
             .then(res => {
                 console.log(res.data);
+                this.setState({ loading: false })
                 this.props.history.push(`/room/${roomId}`)
             })
             .catch(err => {
                 console.log(err.response.data)
                 if (err && err.response && err.response.data) {
-                    this.setState({ errors: err.response.data })
+                    this.setState({ errors: err.response.data, loading: false })
                 }
             })
     }
@@ -85,6 +90,7 @@ class Landing extends Component {
                                             </div>
                                         </div>
                                     </form>
+                                    { this.state.loading && <Spinner/> }
                                 </div>
                             </div>
                         </div>

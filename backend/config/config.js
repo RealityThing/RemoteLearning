@@ -3,7 +3,7 @@ let DB_URI;
 if (process.env.NODE_ENV === 'production') {
   DB_URI = process.env.MONGODB_URI;
 } else {
-  DB_URI = 'mongodb://localhost:27017/remotelearning';
+  DB_URI = 'mongodb://localhost:27017/remotelearning3';
 }
 
 module.exports = {

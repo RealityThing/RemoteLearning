@@ -8,6 +8,7 @@ import isEmpty from '../../utils/is-empty'
 import '../../styles/main.css'
 import { getCharNWordsCount, eachKey } from '../../utils/valueHelpers';
 import logo from '../../assets/logo.png'
+import Spinner from '../layout/Spinner';
 
 // Custom react component/class
 class CreateRoom extends Component {
@@ -21,7 +22,8 @@ class CreateRoom extends Component {
             username: '',
             storedUsername: '',
             errors: {},
-            rooms: []
+            rooms: [],
+            loading: false
         }
     }
 
@@ -75,6 +77,7 @@ class CreateRoom extends Component {
         }
 
         if (!isEmpty(errors)) return
+        this.setState({ loading: true, errors: {} });
 
         axios.post(`/api/room`, data)
             .then(async res => {
@@ -94,19 +97,22 @@ class CreateRoom extends Component {
 
                     rooms.push(res.data._id);
                     localStorage.setItem('rooms', JSON.stringify(rooms));
-                    console.log(rooms);
+
+                    this.setState({ loading: false });
                     this.props.history.push(`/room/${res.data._id}`)
+                } else {
+                    this.setState({ loading: false });
                 }
             })
             .catch(err => {
                 if (err && err.response && err.response.data)
-                    this.setState({ errors: err.response.data })
+                    this.setState({ errors: err.response.data, loading: false })
             })
     }
 
     render() {
 
-        const { errors, username, room } = this.state;
+        const { errors, username, room, loading } = this.state;
 
         return (
             <div className="login landing">
@@ -149,6 +155,11 @@ class CreateRoom extends Component {
                                     </div>
                                 </div>
                             </form>
+                            <div className="row">
+                                <div className="col">
+                                    { loading && <Spinner/>}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
