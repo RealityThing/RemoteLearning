@@ -17,6 +17,12 @@ canvas {
         flex-direction: column;
     }
 }
+
+@media only screen and (max-width : 600px) {
+    .toolbar {
+        margin-bottom: 50px;
+    }
+}
 .toolbar > * {
     display: flex;
     align-items: center;

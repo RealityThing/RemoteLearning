@@ -6,7 +6,7 @@ import TextArea from '../layout/TextArea'
 import SelectList from '../layout/SelectList'
 import Results from './Results';
 import RadioButtons from '../layout/RadioButtons';
-import copy from "copy-to-clipboard";  
+import copy from "copy-to-clipboard"; 
 class Owner extends React.Component {
 
     render () {
@@ -131,11 +131,11 @@ class Owner extends React.Component {
 
                 { !showChallenges || challengeStatus == 'wait' || challengeStatus == 'edit' ? (
                     <div className="row">
-                        <div className="col">
+                        <div className="col link-text">
                             <br/>
-                            <span>Send this link to your students so they can join the room. Click to copy:</span>
+                            <span className="wrap-text">Send this link to your students so they can join the room. Click to copy:</span>
                             <br/>
-                            <a href="javascript:void(0);" onClick={() => copy(`${HOST}/room/${room._id}`)}>{`${HOST}/room/${room._id}`}</a>
+                            <a className="wrap-text" href="javascript:void(0);" onClick={() => copy(`${HOST}/room/${room._id}`)}>{`${HOST}/room/${room._id}`}</a>
                         </div>
                     </div>  
                 ) : null }
