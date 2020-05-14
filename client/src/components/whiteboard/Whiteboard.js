@@ -9,15 +9,7 @@ const canvasHeight = 1000;
 let context2D = null;
 let background = '#fff';
 
-function preventDefault(e) {
-    e.preventDefault();
-}
-function disableScroll() {
-    document.body.addEventListener('touchmove', preventDefault, { passive: false });
-}
-function enableScroll() {
-    document.body.removeEventListener('touchmove', preventDefault);
-}
+
 class Whiteboard extends React.Component {
 
     constructor(props) { 
@@ -34,6 +26,7 @@ class Whiteboard extends React.Component {
             boardStatus: '',
             loading: false,
             updated: false,
+            touching: false
         }
     }
 
@@ -46,6 +39,15 @@ class Whiteboard extends React.Component {
         // draw background
         context2D.fillStyle = background;
         context2D.fillRect(0, 0, canvas.width, canvas.height); 
+        document.body.addEventListener('touchmove', e => {
+            if (this.state.touching) {
+                console.log('prevent')
+                e.preventDefault()
+                return false
+            } 
+            return true;
+
+        }, { passive: false });
 
         this.setState({ canvas });
     }
@@ -162,8 +164,10 @@ class Whiteboard extends React.Component {
     
     onTouchStart = e => {
         e.preventDefault();
-        
-        let { canvas } = this.state;
+
+        let { canvas, touching } = this.state;
+        if (!touching) this.setState({ touching: true });
+
         if (!canvas || !this.isAuthorized()) return;
 
         let scalingX = canvasWidth / canvas.clientWidth;
@@ -171,8 +175,7 @@ class Whiteboard extends React.Component {
 
         let lastX = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
         let lastY = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
-        disableScroll();
-        
+
         this.setState({ lastX, lastY });
         return false;
     }
@@ -194,7 +197,7 @@ class Whiteboard extends React.Component {
 
     onTouchMove = e => {
         e.preventDefault();
-
+        
         let { canvas } = this.state;
         if (!canvas || !this.isAuthorized()) return;
 
@@ -213,7 +216,11 @@ class Whiteboard extends React.Component {
         if (e) e.preventDefault();
         if (!this.isAuthorized()) return;
         this.setState({ lastX: null, lastY: null });
-        enableScroll();
+
+        if (this.state.touching) this.setState({ touching: false })
+
+        document.body.removeEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
         return false;
     }
 
@@ -269,7 +276,7 @@ class Whiteboard extends React.Component {
 
         return (
             <>
-                <canvas onTouchStart= {this.onTouchStart} onTouchMove={this.onTouchMove} onMouseMove={this.onMouseMove} onMouseDown={this.onMouseDown} onMouseUp={this.onRelease} onTouchEnd={this.onRelease} onTouchCancel={this.onRelease} width="1024" height="512" id="canvas"></canvas>
+                <canvas onTouchStart={e => this.onTouchStart(e)} onTouchMove={e => this.onTouchMove(e)} onMouseMove={this.onMouseMove} onMouseDown={this.onMouseDown} onMouseUp={this.onRelease} onTouchEnd={this.onRelease} onTouchCancel={this.onRelease} width="1024" height="512" id="canvas"></canvas>
                 <div className="toolbar">
                     <div className="row">
                         <div className="col s3"/>
