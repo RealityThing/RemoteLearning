@@ -1,0 +1,23 @@
+canvas {
+    margin: 20px auto;
+    width: 100%;
+    display: block;
+    box-shadow: 0 0 0 12px #58768a,  0 5px 38px 0 rgba(116,116,116,0.50);
+    border-radius: 10px;
+}
+.toolbar {
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.774);
+    align-items: center;
+    justify-content: space-between;
+}
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 450px) {
+    .toolbar {
+        flex-direction: column;
+    }
+}
+.toolbar > * {
+    display: flex;
+    align-items: center;
+}

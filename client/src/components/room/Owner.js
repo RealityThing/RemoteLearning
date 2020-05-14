@@ -13,7 +13,7 @@ class Owner extends React.Component {
         const { HOST, myId, users, room, challenge, errors, countDown,clearChallenge, addChoice, showChallenges, challengeStatus, selectChallenge, onEditChallenge, startChallenge, setChallengeStatus } = this.props;
         return (
             <>
-                { challengeStatus == 'wait' && showChallenges ? (
+                { showChallenges ? challengeStatus == 'wait' && showChallenges ? (
                         <Challenges selectChallenge={selectChallenge}/> 
                     ) : challengeStatus == 'edit' ? (
                         <>
@@ -127,13 +127,16 @@ class Owner extends React.Component {
                             <button className="btn" onClick={() => setChallengeStatus('wait')}>New Challenge</button>
                         </>
                     ) : null
-                }
+                : null}
 
                 { !showChallenges || challengeStatus == 'wait' || challengeStatus == 'edit' ? (
-                    <div className="send-link-section">
-                        <span>Send this link to your students so they can join the room. Click to copy:</span>
-                        <br/>
-                        <a href="javascript:void(0);" onClick={() => copy(`${HOST}/room/${room._id}`)}>{`${HOST}/room/${room._id}`}</a>
+                    <div className="row">
+                        <div className="col">
+                            <br/>
+                            <span>Send this link to your students so they can join the room. Click to copy:</span>
+                            <br/>
+                            <a href="javascript:void(0);" onClick={() => copy(`${HOST}/room/${room._id}`)}>{`${HOST}/room/${room._id}`}</a>
+                        </div>
                     </div>  
                 ) : null }
             </>

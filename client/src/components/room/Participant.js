@@ -10,7 +10,7 @@ import RadioButtons from '../layout/RadioButtons';
 class Participant extends React.Component {
 
     render () {
-        const { myId, users, countDown, errors, sendAnswer, answerSent, challenge, challengeStatus, onEditChallenge } = this.props;
+        const { myId, users, viewBoard, countDown, errors, sendAnswer, answerSent, challenge, challengeStatus, onEditChallenge } = this.props;
         return (
             <>
                 {
@@ -68,8 +68,10 @@ class Participant extends React.Component {
                             )}
                         </>
                     ) : challengeStatus == 'complete' ? (
-                        // once timer has reached zero, display the answer the results of all students to everyone
-                        <Results myId={myId} users={users} challenge={challenge} />
+                        <>
+                            <Results myId={myId} users={users} challenge={challenge} />
+                            <button className="btn " onClick={viewBoard}> View board </button>
+                        </>
                     ) : null
                 }
             </>

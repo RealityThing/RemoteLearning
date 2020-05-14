@@ -15,6 +15,7 @@ import { getValueIndexOfArray, eachKey, getCharNWordsCount } from '../../utils/v
 import Spinner from '../layout/Spinner'
 import M from 'materialize-css';
 import ChangeUsername from './ChangeUsername';
+import Whiteboard from '../whiteboard/Whiteboard';
 
 // const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
 // var peerConnection = new RTCPeerConnection(configuration)
@@ -667,7 +668,7 @@ class CreateRoom extends Component {
     // Students
     getChallenge = socket => {
         socket.on('get-challenge', challenge => {
-            this.setState({ challenge, challengeStatus: 'start', countDown: 5 }, () => this.initTimer());
+            this.setState({ challenge, challengeStatus: 'start', countDown: 5, showChallenges: true }, () => this.initTimer());
         })
     }
 
@@ -724,13 +725,7 @@ class CreateRoom extends Component {
     }
 
     challengeCompleted = () => {
-        let { socket, challenge } = this.state;
-        console.log('completed')
         this.setState({ answerSent: false, hasParticipated: false });
-        // if (socket.id == challenge.owner) {
-        //     socket.emit('reset-challenge')
-        // }
-
         this.setState({ challengeStatus: 'complete' })
     }
 
@@ -776,7 +771,7 @@ class CreateRoom extends Component {
                         {/* Left column */}
                         <div className="col s8 nav">
                             <div className="row">
-                                <div className="col s3 m6 l8">
+                                <div className="col s3 m6 l6">
                                     <h4>Room: {room.name}</h4>
                                     <span>Hi {username} </span>
                                     <div>
@@ -795,30 +790,24 @@ class CreateRoom extends Component {
                                         <div className="top-create-btn">
                                             <a className="btn" onClick={() => this.setState({ challengeStatus: 'wait', showChallenges: true })}>
                                                 <i className="material-icons right">add</i> 
-                                                new challenge
+                                                challenge
                                             </a>
-                                        </div>
-                                    </div>
-                                )}
-                                { challengeStatus !== 'start' && (
-                                    <div className="col">
-                                        <div className="top-create-btn">
-                                            <a className="btn whiteboardbtn tooltipped" data-position="bottom" data-tooltip="Coming soon">
+                                            <a className="btn whiteboardbtn" onClick={() => this.setState({ showChallenges: false })}>
                                                 <i className="material-icons right">dashboard</i> 
                                                 Whiteboard
                                             </a>
                                         </div>
                                     </div>
                                 )}
-
                             </div>
 
                             <div className="row">
-                                <div className="col s8 mainArea">
-                                    <div className="center">
-                                        { isOwner ? <Owner challenge={challenge} HOST={HOST} errors={errors} addChoice={this.addChoice} clearChallenge={this.clearChallenge} room={room} showChallenges={showChallenges} myId={socket && socket.id} users={users} countDown={countDown} challengeStatus={challengeStatus} selectChallenge={this.selectChallenge} onEditChallenge={this.onEditChallenge} startChallenge={this.startChallenge} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
-                                            : <Participant challenge={challenge} errors={errors} answerSent={answerSent} sendAnswer={this.sendAnswer} myId={socket && socket.id} users={users} onEditChallenge={this.onEditChallenge} countDown={countDown} challengeStatus={challengeStatus} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
-                                        }
+                                <div className="col s12 center">
+                                    { isOwner ? <Owner challenge={challenge} HOST={HOST} errors={errors} addChoice={this.addChoice} clearChallenge={this.clearChallenge} room={room} showChallenges={showChallenges} myId={socket && socket.id} users={users} countDown={countDown} challengeStatus={challengeStatus} selectChallenge={this.selectChallenge} onEditChallenge={this.onEditChallenge} startChallenge={this.startChallenge} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
+                                        : <Participant challenge={challenge} errors={errors} answerSent={answerSent} sendAnswer={this.sendAnswer} myId={socket && socket.id} users={users} onEditChallenge={this.onEditChallenge} viewBoard={() => this.setState({ showChallenges: false })} countDown={countDown} challengeStatus={challengeStatus} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
+                                    }
+                                    <div style={{ display: showChallenges ? 'none' : 'block'}}>
+                                        <Whiteboard leaving={showChallenges ? 'yes' : 'no'} room={room} myId={socket} users={users} isOwner={isOwner} socket={socket} />
                                     </div>
                                 </div>
                             </div>

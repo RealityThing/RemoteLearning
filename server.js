@@ -89,12 +89,13 @@ app.get('/api/room/:roomId/:userId', (req, res) => {
     if (room) {
         console.log('user:', userId)
         console.log('owner:', room.owner)
+
         if (roomId in rooms) {
             console.log('room exists', rooms[roomId])
 
         } else if (userId && userId == room.owner) {
-            rooms[roomId] = { users: {} }
-            console.log('new room');
+            rooms[roomId] = { users: {}, board: {} }
+            console.log('new room', rooms[roomId]);
 
         } else {
             console.log('room not live atm')
@@ -142,7 +143,7 @@ io.on('connect', socket => {
             rooms[roomId].users[socket.id] = { name, owner };
             
             getUsers();
-            socket.to(roomId).broadcast.emit('user-joined', name)
+            socket.to(roomId).broadcast.emit('user-joined', name);
         }
     })
 
@@ -219,6 +220,42 @@ io.on('connect', socket => {
             rooms[roomid].challenge = null
         }
     })
+
+    // Whiteboard
+    socket.on('on-draw-board', async drawObject => {
+        let roomId = getRoomId()
+        // if (rooms[roomId]) {
+        //     if (rooms[roomId].board.drawing) {
+        //         setTimeout(function(drawObject) {
+        //             return function() { rooms[roomId].board.drawing.push(drawObject) }
+        //         }(drawObject), 0);
+        //     } else
+        //         rooms[roomId].board.drawing = [drawObject]
+        // }
+
+        console.log(rooms[roomId]);
+        socket.to(roomId).broadcast.emit('get-draw-board', drawObject, socket.id)
+    })
+
+    socket.on('send-editing-status', status => {
+        let roomId = getRoomId()
+        // if (rooms[roomId]) {
+        //     rooms[roomId].board.status = status
+        // }
+        socket.to(roomId).broadcast.emit('get-editing-status', status)
+    })
+
+    socket.on('on-erase-board', () => {
+        let roomId = getRoomId()
+        // if (rooms[roomId]) rooms[roomId].board.drawing = []
+
+        socket.to(roomId).broadcast.emit('erase-board')
+    })
+
+    // socket.on('get-entire-board', () => {
+    //     let roomId = getRoomId()
+    //     rooms[roomId] && rooms[roomId].board && socket.emit('entire-board', rooms[roomId].board)
+    // })
 
      // STREAMS
 
