@@ -9,6 +9,15 @@ const canvasHeight = 1000;
 let context2D = null;
 let background = '#fff';
 
+function preventDefault(e) {
+    e.preventDefault();
+}
+function disableScroll() {
+    document.body.addEventListener('touchmove', preventDefault, { passive: false });
+}
+function enableScroll() {
+    document.body.removeEventListener('touchmove', preventDefault);
+}
 class Whiteboard extends React.Component {
 
     constructor(props) { 
@@ -162,6 +171,8 @@ class Whiteboard extends React.Component {
 
         let lastX = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
         let lastY = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
+        disableScroll();
+        
         this.setState({ lastX, lastY });
         return false;
     }
@@ -198,11 +209,11 @@ class Whiteboard extends React.Component {
         return false;
     }
 
-
     onRelease = (e=false) => {
         if (e) e.preventDefault();
         if (!this.isAuthorized()) return;
         this.setState({ lastX: null, lastY: null });
+        enableScroll();
         return false;
     }
 
