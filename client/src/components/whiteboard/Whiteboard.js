@@ -66,21 +66,21 @@ class Whiteboard extends React.Component {
                 if (users && users[who]) setTimeout(() => this.setState({ boardStatus: '' }), 5000)
             })
 
-            // nextProps.socket.emit('get-entire-board');
+            nextProps.socket.emit('get-entire-board');
 
-            // nextProps.socket.on('entire-board', board => {
-            //     if (board && !this.state.updated) {
-            //         console.log(board)
-            //         this.setState({ loading: true, updated: true })
+            nextProps.socket.on('entire-board', board => {
+                if (board && !this.state.updated) {
+                    console.log(board)
+                    this.setState({ loading: true, updated: true })
 
-            //         if (board.drawing) {
-            //             for (let drawObject of board.drawing) {
-            //                 this.drawJob(drawObject);
-            //             }
-            //         }
-            //         this.setState({ loading: false, allowEditing: !isEmpty(board.status) ? board.status : this.state.allowEditing });
-            //     }
-            // })
+                    if (board.drawing) {
+                        for (let drawObject of board.drawing) {
+                            this.drawJob(drawObject);
+                        }
+                    }
+                    this.setState({ loading: false, allowEditing: !isEmpty(board.status) ? board.status : this.state.allowEditing });
+                }
+            })
 
             nextProps.socket.on('erase-board', () => {
                 Whiteboard.eraseBoard();
