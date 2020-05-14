@@ -26,7 +26,9 @@ class Whiteboard extends React.Component {
             boardStatus: '',
             loading: false,
             updated: false,
-            touching: false
+            touching: false,
+            drawing: [],
+            strokeStarted: false
         }
     }
 
@@ -55,12 +57,14 @@ class Whiteboard extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (nextProps.socket) {
             nextProps.socket.on('get-draw-board', (board, who) =>{
-                let { room, users } = this.props;
+                let { users } = this.props;
     
                 if (users && users[who]) {
                     let msg = `${users[who].name} is drawing`
                     this.setState({ boardStatus: msg });
                 }
+                
+                this.setState({ drawing: [...this.state.drawing, board]})
                 this.drawJob(board);
 
                 if (users && users[who]) setTimeout(() => this.setState({ boardStatus: '' }), 5000)
@@ -71,9 +75,10 @@ class Whiteboard extends React.Component {
             nextProps.socket.on('entire-board', board => {
                 if (board && !this.state.updated) {
                     console.log(board)
-                    this.setState({ loading: true, updated: true })
 
                     if (board.drawing) {
+                        this.setState({ loading: true, updated: true, drawing: board.drawing })
+
                         for (let drawObject of board.drawing) {
                             this.drawJob(drawObject);
                         }
@@ -83,11 +88,18 @@ class Whiteboard extends React.Component {
             })
 
             nextProps.socket.on('erase-board', () => {
+                this.setState({ drawing: [] })
                 Whiteboard.eraseBoard();
             })
 
             nextProps.socket.on('get-editing-status', status => {
                 this.setState({ allowEditing: status })
+            })
+            
+            nextProps.socket.on('new-undo', removeSketch => {
+                for (let drawObject of removeSketch) {
+                    this.drawJob(drawObject, 'undo');
+                }
             })
         } 
         
@@ -100,27 +112,10 @@ class Whiteboard extends React.Component {
         }
     }
 
-    drawJob = board => {
+    drawJob = (board, undo=false) => {
         setTimeout(function(board) {
-            return function() { Whiteboard.drawOnBoard(board) }
+            return function() { Whiteboard.drawOnBoard(board, undo) }
         }(board), 0);
-    }
-        
-    static drawOnBoard = drawObject => {
-        if (drawObject && drawObject.lastX != null && drawObject.lastY != null) {            
-            context2D.beginPath();
-            context2D.strokeStyle = drawObject.color;
-            
-            if (drawObject.clearing) {
-                context2D.strokeStyle = background;
-            }
-            context2D.lineJoin = 'round';
-            context2D.lineWidth = drawObject.size;
-            context2D.moveTo(drawObject.lastX, drawObject.lastY);
-            context2D.lineTo(drawObject.x, drawObject.y);
-            context2D.closePath();
-            context2D.stroke();
-        }
     }
 
     isAuthorized = () => {
@@ -149,7 +144,7 @@ class Whiteboard extends React.Component {
     onMouseDown = e => {
         e.preventDefault();
 
-        let { canvas } = this.state;
+        let { canvas, drawing, strokeStarted } = this.state;
         
         if (!canvas || !this.isAuthorized()) return;
         
@@ -159,13 +154,14 @@ class Whiteboard extends React.Component {
         let lastX = (e.pageX - canvas.offsetLeft) * scalingX;
         let lastY = (e.pageY - canvas.offsetTop) * scalingY;
 
+        if (!strokeStarted && drawing[-1] !== 'start') this.setState({ drawing: [...drawing, 'start' ], strokeStarted: true })
         this.setState({ lastX, lastY });
     }
     
     onTouchStart = e => {
         e.preventDefault();
 
-        let { canvas, touching } = this.state;
+        let { canvas, touching, drawing, strokeStarted } = this.state;
         if (!touching) this.setState({ touching: true });
 
         if (!canvas || !this.isAuthorized()) return;
@@ -175,6 +171,8 @@ class Whiteboard extends React.Component {
 
         let lastX = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
         let lastY = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
+
+        if (!strokeStarted && drawing[-1] !== 'start') this.setState({ drawing: [...drawing, 'start' ], strokeStarted: true })
 
         this.setState({ lastX, lastY });
         return false;
@@ -212,20 +210,8 @@ class Whiteboard extends React.Component {
         return false;
     }
 
-    onRelease = (e=false) => {
-        if (e) e.preventDefault();
-        if (!this.isAuthorized()) return;
-        this.setState({ lastX: null, lastY: null });
-
-        if (this.state.touching) this.setState({ touching: false })
-
-        document.body.removeEventListener('touchmove', e => e.preventDefault(), { passive: false });
-
-        return false;
-    }
-
     prepareToDraw = (x,y) => {
-        let { lastX, lastY, color, size, clearing, allowEditing } = this.state;
+        let { lastX, lastY, color, size, clearing, drawing } = this.state;
         let { room } = this.props;
 
         if (lastX != null && lastY != null) {        
@@ -240,13 +226,49 @@ class Whiteboard extends React.Component {
             drawObject.clearing = clearing;
             this.sendDrawing(drawObject)
             Whiteboard.drawOnBoard(drawObject);
-            this.setState({ lastX: x, lastY: y })
+            this.setState({ lastX: x, lastY: y, drawing: [...drawing, drawObject] })
+        }
+    }
+
+    static drawOnBoard = (drawObject, undo=false) => {
+        if (drawObject && drawObject.lastX != null && drawObject.lastY != null) {            
+            context2D.beginPath();
+            context2D.strokeStyle = drawObject.color;
+          
+            if (drawObject.clearing) {
+                context2D.strokeStyle = background;
+            }
+              
+            if (undo) {
+                context2D.strokeStyle = background;
+                context2D.lineWidth = drawObject.size+3;
+            } else {
+                context2D.lineWidth = drawObject.size;
+            }
+
+            context2D.lineJoin = 'round';
+            context2D.moveTo(drawObject.lastX, drawObject.lastY);
+            context2D.lineTo(drawObject.x, drawObject.y);
+            context2D.closePath();
+            context2D.stroke();
         }
     }
 
     sendDrawing = drawObject => {
         let { socket } = this.props;
         socket && socket.emit('on-draw-board', drawObject)
+    }
+
+    onRelease = (e=false) => {
+        if (e) e.preventDefault();
+        if (!this.isAuthorized()) return;
+        let { drawing } = this.state;
+
+        if (drawing.length && drawing[-1] !== 'start' && drawing[-1] !== 'end') this.setState({ lastX: null, lastY: null, drawing: [...drawing, 'end'], strokeStarted: false });
+        if (this.state.touching) this.setState({ touching: false })
+
+        document.body.removeEventListener('touchmove', e => e.preventDefault(), { passive: false });
+        return false;
     }
 
     downloadBoard = () => {
@@ -261,8 +283,34 @@ class Whiteboard extends React.Component {
         if (!this.isAuthorized()) return;
 
         let { socket } = this.props
+        this.setState({ drawing: [] });
         socket && socket.emit('on-erase-board');
         Whiteboard.eraseBoard();
+    }
+
+    isDrawObject = drawObject => drawObject.x && drawObject.y
+
+    goBack = () => {
+        let _drawings = [...this.state.drawing]
+        let { socket } = this.props
+        let removeSketch = [];
+
+        let endIndex = -1;
+        
+        for (let i = _drawings.length - 1; i >= 0; i--) {
+            if (_drawings[i] == 'end') endIndex = i;
+            else if (_drawings[i] == 'start' && endIndex !== -1) {
+                removeSketch = _drawings.splice(i, endIndex +1)
+                let drawingsWNoLabels = _drawings.filter(obj => this.isDrawObject(obj))
+                socket.emit('undo-sketch', removeSketch, drawingsWNoLabels)
+                this.setState({ drawing: _drawings })
+                break
+            }
+        }
+
+        for (let drawObject of removeSketch) {
+            this.drawJob(drawObject, 'undo');
+        }
     }
 
     static eraseBoard = () => {
@@ -293,19 +341,25 @@ class Whiteboard extends React.Component {
                         { isOwner || allowEditing ? (
                                 <> 
                                     <div className="col">
-                                        <div className="input-field">
-                                            Colour: <input name="color" onChange={this.onChange} type="color" value={this.state.color}/>
+                                        <div className="input-field small-text">
+                                            Color<input name="color" onChange={this.onChange} type="color" value={this.state.color}/>
                                         </div>
                                     </div>
+                                    
                                     <div className="col s3">
                                         <p className="range-field">
-                                            <label>Brush size: </label>
+                                            <label className="small-text">Brush Size </label>
                                             <input name="size" onChange={this.onChange} type="range" min="5" max="50" value={this.state.size}/>
                                         </p>
                                     </div>
+                                    <div className="col">
+                                        <a className="color-grey" href="javascript:void(0);" onClick={() => this.goBack()} >
+                                            <i className="material-icons right">undo</i> 
+                                        </a>
+                                    </div>
                                     <div className="col s2">
                                         <p>
-                                            <label>
+                                            <label className="small-text">
                                                 {mobileScreen && 'Eraser'}
                                                 <input type="checkbox" name="clearing" onChange={e => this.onChange(e, 'checkbox')} checked={this.state.clearing} />
                                                 <span>{!mobileScreen && 'Eraser'}</span>
@@ -331,16 +385,18 @@ class Whiteboard extends React.Component {
                     <div className="center">
                         <div className="col s3"/> 
                         <div className="col">
-                            <a onClick={() => this.downloadBoard()} className="btn blue lighten-1" id="save-board" href="javascript:void(0);">Download</a>
+                            <a onClick={() => this.downloadBoard()} className="btn blue lighten-1" id="save-board" href="javascript:void(0);">Download board</a>
                         </div>
 
                         { isOwner || allowEditing ? (
+                            <>
                             <div className="col">
-                                <a onClick={() => this.eraseEvent()} className="btn red lighten-1" href="javascript:void(0);">Erase</a>
+                                <a onClick={() => this.eraseEvent()} className="btn red lighten-1" href="javascript:void(0);">Erase board</a>
                             </div>
+                            </>
                         ) : null}
 
-                        <div className="col s3">
+                        <div className="col s6 m3 l3">
                             <span className="me">
                                 { loading ? 'Loading...' : boardStatus ? boardStatus : ''}
                             </span>

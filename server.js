@@ -257,6 +257,12 @@ io.on('connect', socket => {
         rooms[roomId] && rooms[roomId].board && socket.emit('entire-board', rooms[roomId].board)
     })
 
+    socket.on('undo-sketch', (removeSketch, updatedDrawings) => {
+        let roomId = getRoomId()
+        rooms[roomId].board.drawing = updatedDrawings
+        socket.to(roomId).broadcast.emit('new-undo', removeSketch)
+    })
+
      // STREAMS
 
     /*

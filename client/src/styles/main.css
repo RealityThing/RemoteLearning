@@ -36,6 +36,9 @@ body {
     padding: 15px;
   }
 
+.color-grey {
+    color: #6d6d6d
+}
 .container {
     margin: 0 auto;
     max-width: 1280px;
