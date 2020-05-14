@@ -135,21 +135,6 @@ class Whiteboard extends React.Component {
         let { socket } = this.props;
         socket && socket.emit('send-editing-status', checked)
     }
-    
-    onMouseMove = e => {
-        e.preventDefault();
-
-        let { canvas } = this.state;
-        if (!canvas || !this.isAuthorized()) return;
-
-        let scalingX = canvasWidth / canvas.clientWidth;
-        let scalingY = canvasHeight / canvas.clientHeight;
-
-        let x = (e.pageX - canvas.offsetLeft) * scalingX;
-        let y = (e.pageY - canvas.offsetTop) * scalingY;
-
-        this.prepareToDraw(x,y);
-    }
 
     onMouseDown = e => {
         e.preventDefault();
@@ -166,6 +151,52 @@ class Whiteboard extends React.Component {
 
         this.setState({ lastX, lastY });
     }
+    
+    onTouchStart = e => {
+        e.preventDefault();
+        
+        let { canvas } = this.state;
+        if (!canvas || !this.isAuthorized()) return;
+
+        let scalingX = canvasWidth / canvas.clientWidth;
+        let scalingY = canvasHeight / canvas.clientHeight;
+
+        let lastX = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
+        let lastY = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
+
+        this.setState({ lastX, lastY });
+    }
+    
+    onMouseMove = e => {
+        e.preventDefault();
+
+        let { canvas } = this.state;
+        if (!canvas || !this.isAuthorized()) return;
+
+        let scalingX = canvasWidth / canvas.clientWidth;
+        let scalingY = canvasHeight / canvas.clientHeight;
+
+        let x = (e.pageX - canvas.offsetLeft) * scalingX;
+        let y = (e.pageY - canvas.offsetTop) * scalingY;
+
+        this.prepareToDraw(x,y);
+    }
+
+    onTouchMove = e => {
+        e.preventDefault();
+
+        let { canvas } = this.state;
+        if (!canvas || !this.isAuthorized()) return;
+
+        let scalingX = canvasWidth / canvas.clientWidth;
+        let scalingY = canvasHeight / canvas.clientHeight;
+
+        let x = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
+        let y = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
+
+        this.prepareToDraw(x,y);
+    }
+
 
     onRelease = (e=false) => {
         if (e) e.preventDefault();
@@ -196,38 +227,6 @@ class Whiteboard extends React.Component {
     sendDrawing = drawObject => {
         let { socket } = this.props;
         socket && socket.emit('on-draw-board', drawObject)
-    }
-
-    onTouchStart = e => {
-        e.preventDefault();
-        
-        let { canvas } = this.state;
-
-        if (!canvas || !this.isAuthorized()) return;
-
-        let scalingX = canvasWidth / canvas.clientWidth;
-        let scalingY = canvasHeight / canvas.clientHeight;
-
-        let lastX = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
-        let lastY = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
-
-        this.setState({ lastX, lastY });
-    }
-
-    onTouchMove = e => {
-        e.preventDefault();
-
-        let { canvas } = this.state;
-        
-        if (!canvas || !this.isAuthorized()) return;
-
-        let scalingX = canvasWidth / canvas.clientWidth;
-        let scalingY = canvasHeight / canvas.clientHeight;
-
-        let x = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
-        let y = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
-
-        this.draw(x,y);
     }
 
     downloadBoard = () => {
