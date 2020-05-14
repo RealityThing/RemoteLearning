@@ -165,6 +165,7 @@ class Whiteboard extends React.Component {
         let lastY = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
 
         this.setState({ lastX, lastY });
+        return false;
     }
     
     onMouseMove = e => {
@@ -195,6 +196,8 @@ class Whiteboard extends React.Component {
         let y = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
 
         this.prepareToDraw(x,y);
+
+        return false;
     }
 
 
@@ -202,6 +205,7 @@ class Whiteboard extends React.Component {
         if (e) e.preventDefault();
         if (!this.isAuthorized()) return;
         this.setState({ lastX: null, lastY: null })
+        return false;
     }
 
     prepareToDraw = (x,y) => {
