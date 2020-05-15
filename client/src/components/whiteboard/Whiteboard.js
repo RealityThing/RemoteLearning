@@ -7,7 +7,7 @@ const canvasWidth = 1500;
 const canvasHeight = 1000;
 
 let context2D = null;
-let background = '#fff';
+let background = '#ffffff';
 
 
 class Whiteboard extends React.Component {
@@ -20,6 +20,7 @@ class Whiteboard extends React.Component {
             lastX: null,
             lastY: null,
             color: '#55aae6',
+            background: '#ffffff',
             size: 30,
             clearing: false,
             allowEditing: false,
@@ -78,7 +79,6 @@ class Whiteboard extends React.Component {
 
                     if (board.drawing) {
                         this.setState({ loading: true, updated: true, drawing: board.drawing })
-                        localStorage.setItem('drawing', JSON.stringify(board.drawing))
 
                         for (let drawObject of board.drawing) {
                             this.drawJob(drawObject);
@@ -132,6 +132,11 @@ class Whiteboard extends React.Component {
 
         if (name == 'allowEditing') {
             this.sendStatus(checked)
+        }
+
+        if (name == 'background') {
+            background = value;
+            Whiteboard.eraseBoard()
         }
 
         this.setState({ [name]: checkbox ? checked : value })
@@ -341,6 +346,11 @@ class Whiteboard extends React.Component {
                     <div className="row">
                         { isOwner || allowEditing ? (
                                 <> 
+                                    {/* <div className="col">
+                                        <div className="input-field small-text">
+                                            Background<input name="background" onChange={this.onChange} type="color" value={this.state.background}/>
+                                        </div>
+                                    </div> */}
                                     <div className="col">
                                         <div className="input-field small-text">
                                             Color<input name="color" onChange={this.onChange} type="color" value={this.state.color}/>

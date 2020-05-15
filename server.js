@@ -224,7 +224,7 @@ io.on('connect', socket => {
     // Whiteboard
     socket.on('on-draw-board', async drawObject => {
         let roomId = getRoomId()
-        if (rooms[roomId]) {
+        if (rooms[roomId] && rooms[roomId].board) {
             if (rooms[roomId].board.drawing) {
                 setTimeout(function(drawObject) {
                     return function() { rooms[roomId].board.drawing.push(drawObject) }
@@ -233,7 +233,6 @@ io.on('connect', socket => {
                 rooms[roomId].board.drawing = [drawObject]
         }
 
-        console.log(rooms[roomId]);
         socket.to(roomId).broadcast.emit('get-draw-board', drawObject, socket.id)
     })
 
@@ -241,15 +240,17 @@ io.on('connect', socket => {
         let roomId = getRoomId()
         if (rooms[roomId]) {
             rooms[roomId].board.status = status
+            socket.to(roomId).broadcast.emit('get-editing-status', status)
         }
-        socket.to(roomId).broadcast.emit('get-editing-status', status)
     })
 
     socket.on('on-erase-board', () => {
         let roomId = getRoomId()
-        if (rooms[roomId]) rooms[roomId].board.drawing = []
+        if (rooms[roomId]) {
+            if (rooms[roomId]) rooms[roomId].board.drawing = []
 
-        socket.to(roomId).broadcast.emit('erase-board')
+            socket.to(roomId).broadcast.emit('erase-board')
+        }
     })
 
     socket.on('get-entire-board', () => {
@@ -259,8 +260,10 @@ io.on('connect', socket => {
 
     socket.on('undo-sketch', (removeSketch, updatedDrawings) => {
         let roomId = getRoomId()
-        rooms[roomId].board.drawing = updatedDrawings
-        socket.to(roomId).broadcast.emit('new-undo', removeSketch)
+        if (rooms && rooms[roomId] && rooms[roomId].board) {
+            rooms[roomId].board.drawing = updatedDrawings
+            socket.to(roomId).broadcast.emit('new-undo', removeSketch)
+        }
     })
 
      // STREAMS
