@@ -9,7 +9,6 @@ const canvasHeight = 1000;
 let context2D = null;
 let background = '#ffffff';
 
-
 class Whiteboard extends React.Component {
 
     constructor(props) { 
@@ -336,9 +335,9 @@ class Whiteboard extends React.Component {
                         <div className="col s3"/>
                         <div className="col s6">
                             <h5 className="heading me">
-                                {!isOwner && !allowEditing ? 'Watching Mode' 
-                                : !isOwner && allowEditing ? 'You Can Draw!' 
-                                : isOwner && allowEditing ? 'Others can now draw' : null }
+                                {!isOwner && !allowEditing ? boardStatus ? boardStatus : 'Watching Mode' 
+                                : !isOwner && allowEditing ? boardStatus ? boardStatus : 'You Can Draw!' 
+                                : isOwner && allowEditing ? boardStatus ? boardStatus : 'Others can now draw' : null }
                             </h5>
                         </div>
                         <div className="col s3"/>
@@ -408,11 +407,7 @@ class Whiteboard extends React.Component {
                         ) : null}
 
                         <div className="col s3">
-                            {/* <div>
-                                <p className="me">
-                                    { loading ? 'Loading...' : boardStatus ? boardStatus : ''}
-                                </p>
-                            </div> */}
+                                
                         </div>
                     </div>
                 </div>
