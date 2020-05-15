@@ -78,6 +78,7 @@ class Whiteboard extends React.Component {
 
                     if (board.drawing) {
                         this.setState({ loading: true, updated: true, drawing: board.drawing })
+                        localStorage.setItem('drawing', JSON.stringify(board.drawing))
 
                         for (let drawObject of board.drawing) {
                             this.drawJob(drawObject);
