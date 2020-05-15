@@ -11,8 +11,8 @@ const ChangeUsername = ({ username, changeUsername, setUsername, errors, room })
             </div>
             <div className="row">
                 <form noValidate onSubmit={setUsername}>
-                    <div className="col s4"/>
-                    <div className="col s3">
+                    <div className="col s12 m2 l4"/>
+                    <div className="col s12 m6 l4">
                         <TextFieldGroup
                             type="text"
                             placeholder="Enter your full name to join the room"

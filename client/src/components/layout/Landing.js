@@ -69,8 +69,8 @@ class Landing extends Component {
                                 </div>
                                 <div className="row">
                                     <form noValidate onSubmit={this.onSubmit}>
-                                        <div className="col s12 m0 l3"/>
-                                        <div className="col s12 m6 l3">
+                                        <div className="col s0 m0 l3"/>
+                                        <div className="col s12 m8 l3">
                                             <TextFieldGroup
                                                 type="text"
                                                 placeholder="Paste room ID"

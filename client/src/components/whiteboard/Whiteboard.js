@@ -396,21 +396,23 @@ class Whiteboard extends React.Component {
                     <div className="center">
                         <div className="col s3"/> 
                         <div className="col">
-                            <a onClick={() => this.downloadBoard()} className="btn blue lighten-1" id="save-board" href="javascript:void(0);">Download board</a>
+                            <a onClick={() => this.downloadBoard()} className="btn blue lighten-1" id="save-board" href="javascript:void(0);">Download</a>
                         </div>
 
                         { isOwner || allowEditing ? (
                             <>
                             <div className="col">
-                                <a onClick={() => this.eraseEvent()} className="btn red lighten-1" href="javascript:void(0);">Erase board</a>
+                                <a onClick={() => this.eraseEvent()} className="btn red lighten-1" href="javascript:void(0);">Erase</a>
                             </div>
                             </>
                         ) : null}
 
-                        <div className="col s6 m3 l3">
-                            <span className="me">
-                                { loading ? 'Loading...' : boardStatus ? boardStatus : ''}
-                            </span>
+                        <div className="col s3">
+                            {/* <div>
+                                <p className="me">
+                                    { loading ? 'Loading...' : boardStatus ? boardStatus : ''}
+                                </p>
+                            </div> */}
                         </div>
                     </div>
                 </div>
