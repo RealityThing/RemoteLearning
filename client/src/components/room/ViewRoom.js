@@ -335,8 +335,6 @@ class CreateRoom extends Component {
 
     validateRoomId = async e => {
         let roomId = this.props.match.params.id;
-        this.props.setLoader(true);
-
         if (isEmpty(roomId)) {
             this.setState({ inValidId: true })
             return;
@@ -371,9 +369,11 @@ class CreateRoom extends Component {
                 let isOwner = false;
                 if (id && id == res.data.room.owner) isOwner = true
                 console.log('isOwner', isOwner);
-                if (userIsSet) this.saveRoom(res.data.room);
+                if (userIsSet) {
+                    this.saveRoom(res.data.room);
+                }
+                
                 this.setState({ inValidId: false, loading: false, isOwner, room: res.data.room });
-                this.props.setLoader(false);
             } else {
                 console.log(2)
             }
@@ -661,7 +661,7 @@ class CreateRoom extends Component {
             answer: challenge.answer.trim()
         }
 
-        console.log(c.answer)
+        console.log(c.answer);
 
         let beginNow = window.confirm(`There is ${eachKey(users).length - 1} student${eachKey(users).length - 1 > 1 ? 's' : ''} in the room, do you want to begin the challenge now?`);
         if (!beginNow) return
@@ -787,7 +787,7 @@ class CreateRoom extends Component {
                                     <h4>Room: {room.name}</h4>
                                     <span>Hi {username} </span>
                                     <div>
-                                        <a className="link-dash" onClick={() => this.setState({ changeUsername: true })} href="javascript:void(0);">Change username</a>
+                                        <a className="link-dash" onClick={() => {this.setState({ changeUsername: true });}} href="javascript:void(0);">Change username</a>
                                     </div>
                                    { isOwner && (
                                         <div>
@@ -801,7 +801,9 @@ class CreateRoom extends Component {
                                    <>
                                     <div className="col">
                                         <div className="top-create-btn">
-                                            <a className="btn" onClick={() => this.setState({ challengeStatus: 'wait', showChallenges: true })}>
+                                            <a className="btn" onClick={() => {
+                                                    this.setState({ challengeStatus: 'wait', showChallenges: true });
+                                                }}>
                                                 <i className="material-icons right">add</i> 
                                                 challenge
                                             </a>

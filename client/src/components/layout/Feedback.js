@@ -52,12 +52,12 @@ class Footer extends Component {
 
     render() {
         return (
-            <div className="mb">
-                <a className="btn teal lighten-2 modal-trigger" href="#modal1">Send Feedback</a>
+            <>
+                <a className="white-text modal-trigger" href="#modal1"><span className="footer-text small-text report-issue">Report issue</span></a>
 
                 <div id="modal1" className="modal">
                 <div className="modal-content">
-                    <h5 className="">Send us any issues or feedback you have had while using RemoteLearning</h5>
+                    <h5 className="black-text">Send us any issues or feedback you have had while using RemoteLearning</h5>
                     <br/>
                     
                     <form onSubmit={this.submit}>
@@ -88,7 +88,7 @@ class Footer extends Component {
                         <a href="javascript:void(0);" onClick={() => this.setState({ errors: {}, message: '', email: '', sent: false })} className="modal-close btn-flat">Close</a>
                     </div>
                 </div>
-            </div>
+            </>
         )
     }
 }
