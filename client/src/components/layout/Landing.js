@@ -19,6 +19,7 @@ class Landing extends Component {
             id: false,
             loading: false
         }
+        this.video = null
     }
 
     componentDidMount() {
@@ -54,6 +55,13 @@ class Landing extends Component {
             })
     }
 
+    toggleVideo = () => {
+        if (this.video == null) return false
+        console.log(this.video);
+
+        this.video.paused ? this.video.play() : this.video.pause()
+    }
+
     render() {
         return (
             <div className="landing">
@@ -63,9 +71,13 @@ class Landing extends Component {
                             <div className="text-center">
                                 <div className="center">
                                     <img src={logo} className="logo"/>
-                                    <div className="info-msg">
-                                        <span>An interactive platform for schools, university or anyone!<br/> Ask questions and challenge others in real-time.<br/> No sign-up required, just create a room then send the link to others.</span>
+                                    <div className="row">
+                                        {/* <video className="video-player" ref={ref => this.video = ref} onClick={() => this.toggleVideo()} width="700" autoplay="autoplay">
+                                            <source src={require('../../assets/RemoteLearning.mp4')} type="video/mp4" />
+                                        </video> */}
+                                        <iframe className="video-player" width="650" height="390" src="https://www.youtube.com/embed/I_4kEnfrUD0?controls=0showinfo=0&relo=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
+                                    <span>An interactive and fun learning platform for all!<br/> Collaborate, draw, ask questions and challenge others in real-time.<br/> No sign-up required, just create a room then send the link to others.</span>
                                 </div>
                                 <div className="row">
                                     <form noValidate onSubmit={this.onSubmit}>

@@ -23,6 +23,11 @@ body {
         font-size: 10px !important;
     }
 }
+@media only screen and (max-width : 780px) {
+    .video-player {
+        width: 100%;
+    }
+}
 
 .wrap-text {
     word-wrap: break-word;
@@ -142,7 +147,7 @@ span, p {
 }
 
 .landing {
-    margin-top: 75px;
+    margin-top: 25px;
 }
 
 .challenge:hover {
@@ -178,8 +183,10 @@ span, p {
     margin-top: 50px;
 }
 
-.info-msg {
+.video-player {
     margin-top: -35px;
+}
+.info-msg {
     margin-bottom: 35px;
 }
 
