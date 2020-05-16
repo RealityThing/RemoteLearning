@@ -111,6 +111,7 @@ class CreateRoom extends Component {
     }
 
     componentDidMount = async() => {
+
         await this.validateRoomId();
         const { loading, inValidId, room, userIsSet } = this.state;
         var elems = document.querySelector('.tooltipped');
@@ -334,6 +335,7 @@ class CreateRoom extends Component {
 
     validateRoomId = async e => {
         let roomId = this.props.match.params.id;
+        this.props.setLoader(true);
 
         if (isEmpty(roomId)) {
             this.setState({ inValidId: true })
@@ -371,6 +373,7 @@ class CreateRoom extends Component {
                 console.log('isOwner', isOwner);
                 if (userIsSet) this.saveRoom(res.data.room);
                 this.setState({ inValidId: false, loading: false, isOwner, room: res.data.room });
+                this.props.setLoader(false);
             } else {
                 console.log(2)
             }
@@ -824,6 +827,7 @@ class CreateRoom extends Component {
                                     <div style={{ display: showChallenges ? 'none' : 'block'}}>
                                         <Whiteboard mobileScreen={mobileScreen} leaving={showChallenges ? 'yes' : 'no'} room={room} myId={socket} users={users} isOwner={isOwner} socket={socket} />
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -849,6 +853,7 @@ class CreateRoom extends Component {
                                 </form>
                             </div>
                             { room && <a href={`/room/${room._id}`} ><span className="small-text link-dash">Refresh room if you are experiencing issues.</span></a> }
+                            
                         </div>
                     </div>
                 )}

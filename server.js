@@ -10,6 +10,8 @@ const path = require('path');
 
 const isEmpty = require('./backend/validation/is-empty');
 const Room = require('./backend/models/Room');
+const Feedback = require('./backend/models/Feedback');
+
 const ObjectId = require('mongoose').Types.ObjectId;
 
 // Body parser middleware
@@ -76,6 +78,36 @@ app.post('/api/room', (req, res) => {
     .catch(err => console.log(err))
 })
 
+app.post('/api/feedback', (req,res) => {
+
+    if (isEmpty(req.body.message)) {
+        res.status(400).json({ message: 'Please enter a message' })
+        return
+    }
+
+    Feedback.findOne({ message: req.body.message }).then(feedback => {
+        if (feedback) {
+            res.status(400).json({ message: 'Message already sent' })
+            return
+            
+        } else {
+            console.log(req.body)
+
+            const newFeedback = new Feedback(req.body)
+
+            newFeedback.save().then(() => {
+                console.log('saved')
+                res.json({ success: true })
+
+            }).catch(err => {
+                console.log(err)
+                res.status(400).json({ error: 'Something went wrong' })
+            })
+        }
+    })
+    
+
+})
 // Check if room exists
 app.get('/api/room/:roomId/:userId', (req, res) => {
   let { roomId, userId } = req.params;

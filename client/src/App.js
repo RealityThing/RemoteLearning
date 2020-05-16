@@ -43,6 +43,14 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = { loading: false }
+  }
+  setLoader = status => {
+    console.log(status)
+    this.setState({ loading: status })
+  }
   render() {
     return (
       <Provider store={store}>
@@ -50,10 +58,12 @@ class App extends Component {
           <div className='App container'>
             <Route exact path='/' component={Landing} />
             <Route exact path='/create' component={CreateRoom} />
-            <Route exact path='/room/:id' component={ViewRoom} />
+            <Route exact path='/room/:id' 
+              render={props => <ViewRoom {...props} setLoader={this.setLoader} />}
+            />
           </div>
         </Router>
-        <Footer/>
+       {!this.state.loading && <Footer class={window.location.href.includes('/room/') ? 'footer-fixed' : 'footer'} />}
       </Provider>
     );
   }
