@@ -16,6 +16,7 @@ import Spinner from '../layout/Spinner'
 import M from 'materialize-css';
 import ChangeUsername from './ChangeUsername';
 import Whiteboard from '../whiteboard/Whiteboard';
+import Feedback from '../layout/Feedback'
 
 // const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
 // var peerConnection = new RTCPeerConnection(configuration)
@@ -369,6 +370,11 @@ class CreateRoom extends Component {
                 let isOwner = false;
                 if (id && id == res.data.room.owner) isOwner = true
                 console.log('isOwner', isOwner);
+
+                if (id == 'none' && res.data.userId) {
+                    localStorage.setItem('id', res.data.userId)
+                }
+
                 if (userIsSet) {
                     this.saveRoom(res.data.room);
                 }
@@ -855,7 +861,8 @@ class CreateRoom extends Component {
                                 </form>
                             </div>
                             { room && <a href={`/room/${room._id}`} ><span className="small-text link-dash">Refresh room if you are experiencing issues.</span></a> }
-                            
+                            <br/>
+                            <Feedback top={true}/>
                         </div>
                     </div>
                 )}

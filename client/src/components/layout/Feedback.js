@@ -53,7 +53,7 @@ class Footer extends Component {
     render() {
         return (
             <>
-                <a className="white-text modal-trigger" href="#modal1"><span className="footer-text small-text report-issue">Report issue</span></a>
+                <a className="white-text modal-trigger" href="#modal1"><span className={`footer-text small-text ${this.props.top ? 'red-text' : 'report-issue'}`}>Report issue</span></a>
 
                 <div id="modal1" className="modal">
                 <div className="modal-content">

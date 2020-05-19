@@ -25,6 +25,8 @@ class Landing extends Component {
     componentDidMount() {
         let id = localStorage.getItem('id')
         if (!isEmpty(id)) this.setState({ id })
+
+        
     }
 
     onSubmit = e => {
@@ -45,6 +47,9 @@ class Landing extends Component {
             .then(res => {
                 console.log(res.data);
                 this.setState({ loading: false })
+                if (id == 'none' && res.data.userId) {
+                    localStorage.setItem('id', res.data.userId)
+                }
                 this.props.history.push(`/room/${roomId}`)
             })
             .catch(err => {
