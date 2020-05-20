@@ -219,7 +219,8 @@ class CreateRoom extends Component {
             console.log('disconnected')
             M.toast({html: 'Your connection has been lost', displayLength: 1000000, classes: 'red'})
             setTimeout(() => {
-               this.reconnect();
+                window.location.reload();
+            //    this.reconnect();
             }, 5000)
         })
     }
