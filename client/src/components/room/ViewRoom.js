@@ -130,9 +130,7 @@ class CreateRoom extends Component {
         M.Tooltip.init(elems, {});
 
         if (!loading && !inValidId && !isEmpty(room)) {
-            let socket = io.connect(window.location.origin);
-
-            // document.getElementById('remote').srcObject = remoteStream;
+            let socket = io();
             this.setState({ socket }, () => userIsSet && this.socketEvents(socket));
         }
     }
@@ -221,9 +219,21 @@ class CreateRoom extends Component {
             console.log('disconnected')
             M.toast({html: 'Your connection has been lost', displayLength: 1000000, classes: 'red'})
             setTimeout(() => {
-                window.location.reload()
+               this.reconnect();
             }, 5000)
         })
+    }
+
+    reconnect = () => {
+        let socket = io();
+        this.setState({ socket }, () => {
+            if (socket.connected) {
+                this.socketEvents(socket)
+                M.Toast.dismissAll();
+                M.toast({html: "You're back online", displayLength: 5000, classes: 'green' })
+            }
+        });
+       
     }
 
     // getStream = async () => {
