@@ -217,7 +217,8 @@ class CreateRoom extends Component {
     disconnected = socket => {
         socket.on('disconnect', () => {
             console.log('disconnected')
-            M.toast({html: 'Your connection has been lost', displayLength: 1000000, classes: 'red'})
+            M.Toast.dismissAll();
+            M.toast({html: 'Your connection has been lost.', displayLength: 1000000, classes: 'red'})
             setTimeout(() => {
                 window.location.reload();
             //    this.reconnect();
@@ -471,12 +472,19 @@ class CreateRoom extends Component {
 
     sendMessage = e => {
         e.preventDefault();
+        let { messages, message, socket, username } = this.state;
 
-        if (!isEmpty(this.state.message)) {
-            this.state.socket.emit('send-message', this.state.message);
+        if (!isEmpty(message)) {
+            socket.emit('send-message', message);
 
-            let msg = [<strong className='me'>{this.state.username}</strong>, ': ' + this.state.message];
-            this.setState({ message: '', messages: [...this.state.messages, msg] });
+            let msg = [<strong className='me'>{username}</strong>, ': ' + message];
+
+            let msgs = [...messages]
+            if (msgs.length >= 25)
+                msgs.splice(1, 1);
+
+            msgs.push(msg);
+            this.setState({ messages: msgs, message: '' })
         }
     }
 
@@ -527,7 +535,7 @@ class CreateRoom extends Component {
 
             let msg = [<strong className={data.id == socket.id ? 'me' : data.id == this.getOwner() ? 'owner' : 'other' }>{data.username}</strong>, ': ' + data.message];
             let msgs = [...messages]
-
+            console.log(msgs.length)
             if (msgs.length >= 25)
                 msgs.splice(1, 1);
 

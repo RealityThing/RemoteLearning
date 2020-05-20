@@ -65,7 +65,7 @@ class Whiteboard extends React.Component {
                     this.setState({ boardStatus: msg });
                 }
                 
-                this.setState({ drawing: [...this.state.drawing, board]})
+                // this.setState({ drawing: [...this.state.drawing, board]})
                 this.drawJob(board);
 
                 if (users && users[who]) setTimeout(() => this.setState({ boardStatus: '' }), 5000)
@@ -162,7 +162,7 @@ class Whiteboard extends React.Component {
         let lastX = (e.pageX - canvas.offsetLeft) * scalingX;
         let lastY = (e.pageY - canvas.offsetTop) * scalingY;
 
-        if (!strokeStarted && drawing[-1] !== 'start') this.setState({ drawing: [...drawing, 'start' ], strokeStarted: true })
+        // if (!strokeStarted && drawing[-1] !== 'start') this.setState({ drawing: [...drawing, 'start' ], strokeStarted: true })
         this.setState({ lastX, lastY });
     }
     
@@ -180,7 +180,7 @@ class Whiteboard extends React.Component {
         let lastX = (e.targetTouches[0].pageX - canvas.offsetLeft) * scalingX;
         let lastY = (e.targetTouches[0].pageY - canvas.offsetTop) * scalingY;
 
-        if (!strokeStarted && drawing[-1] !== 'start') this.setState({ drawing: [...drawing, 'start' ], strokeStarted: true })
+        // if (!strokeStarted && drawing[-1] !== 'start') this.setState({ drawing: [...drawing, 'start' ], strokeStarted: true })
 
         this.setState({ lastX, lastY });
         return false;
@@ -234,7 +234,7 @@ class Whiteboard extends React.Component {
             drawObject.clearing = clearing;
             this.sendDrawing(drawObject)
             Whiteboard.drawOnBoard(drawObject);
-            this.setState({ lastX: x, lastY: y, drawing: [...drawing, drawObject] })
+            this.setState({ lastX: x, lastY: y }) // drawing: [...drawing, drawObject]
         }
     }
 
@@ -272,7 +272,8 @@ class Whiteboard extends React.Component {
         if (!this.isAuthorized()) return;
         let { drawing } = this.state;
 
-        if (drawing.length && drawing[-1] !== 'start' && drawing[-1] !== 'end') this.setState({ lastX: null, lastY: null, drawing: [...drawing, 'end'], strokeStarted: false });
+        this.setState({ lastX: null, lastY: null })
+        // if (drawing.length && drawing[-1] !== 'start' && drawing[-1] !== 'end') this.setState({ drawing: [...drawing, 'end'], strokeStarted: false });
         if (this.state.touching) this.setState({ touching: false })
 
         document.body.removeEventListener('touchmove', e => e.preventDefault(), { passive: false });

@@ -152,7 +152,10 @@ app.get('/api/room/:roomId/:userId', (req, res) => {
                                 })
                                 .catch(err => console.log(err))
                         } else {
-                            res.json({ success: true, room });
+                            user.logins += 1
+                            user.save()
+                                .then(() => res.json({ success: true, room }))
+                                .catch(err => console.log(err))
                         }
                     } else {
                         newUserGetAPI(room, res)
@@ -167,7 +170,15 @@ app.get('/api/room/:roomId/:userId', (req, res) => {
         } else if (userId && userId == room.owner) {
             rooms[roomId] = { users: {}, board: {} }
             console.log('GET ROOM: Owner')
-            res.json({ success: true, room });
+
+            User.findById(userId).then(user => {
+                user.logins += 1
+                user.save()
+                    .then(() => {
+                        res.json({ success: true, room });
+                    })
+                    .catch(err => console.log(err))
+            })
 
         } else {
             console.log('GET ROOM: room not live atm')
@@ -181,6 +192,10 @@ app.get('/api/room/:roomId/:userId', (req, res) => {
   })
   .catch(err => console.log(err))
 })
+
+function incrementLogin (id) {
+
+}
 
 function newUserGetAPI (room, res) {
     const newUser = new User({
@@ -289,9 +304,11 @@ io.on('connect', socket => {
 
     socket.on('new-challenge', challenge => {
         let roomId = getRoomId()
-        rooms[roomId].challenge = challenge
-        console.log('new challenge by', socket.username, challenge)
-        socket.to(roomId).broadcast.emit('get-challenge', challenge)
+        if (rooms[roomId]) {
+            rooms[roomId].challenge = challenge
+            console.log('new challenge by', socket.username, challenge)
+            socket.to(roomId).broadcast.emit('get-challenge', challenge)
+        }
     })
 
     socket.on('new-participant', challenge => {
