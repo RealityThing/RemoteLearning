@@ -18,9 +18,9 @@ class Whiteboard extends React.Component {
             context2D: null,
             lastX: null,
             lastY: null,
-            color: '#55aae6',
+            color: '#000000',
             background: '#ffffff',
-            size: 30,
+            size: 10,
             clearing: false,
             allowEditing: false,
             boardStatus: '',
@@ -28,7 +28,8 @@ class Whiteboard extends React.Component {
             updated: false,
             touching: false,
             drawing: [],
-            strokeStarted: false
+            strokeStarted: false,
+            gotBoard: false
         }
     }
 
@@ -70,21 +71,23 @@ class Whiteboard extends React.Component {
                 if (users && users[who]) setTimeout(() => this.setState({ boardStatus: '' }), 5000)
             })
 
-            nextProps.socket.emit('get-entire-board');
+            // nextProps.socket.on('entire-board', board => {
+            //     if (board && !this.state.updated) {
+            //         console.log(board)
 
-            nextProps.socket.on('entire-board', board => {
-                if (board && !this.state.updated) {
-                    console.log(board)
+            //         if (board.drawing) {
+            //             this.setState({ loading: true, updated: true, drawing: board.drawing })
 
-                    if (board.drawing) {
-                        this.setState({ loading: true, updated: true, drawing: board.drawing })
+            //             for (let drawObject of board.drawing) {
+            //                 this.drawJob(drawObject);
+            //             }
+            //         }
+            //         this.setState({ loading: false, allowEditing: !isEmpty(board.status) ? board.status : this.state.allowEditing });
+            //     }
+            // })
 
-                        for (let drawObject of board.drawing) {
-                            this.drawJob(drawObject);
-                        }
-                    }
-                    this.setState({ loading: false, allowEditing: !isEmpty(board.status) ? board.status : this.state.allowEditing });
-                }
+            nextProps.socket.on('get-board-status', board => {
+                this.setState({ allowEditing: board.status })
             })
 
             nextProps.socket.on('erase-board', () => {
@@ -106,8 +109,8 @@ class Whiteboard extends React.Component {
         if (nextProps.leaving) {
             if (nextProps.leaving == 'yes' && this.state.allowEditing) {
                 console.log('leave')
-                this.setState({ allowEditing: false });
-                this.sendStatus(false);
+                // this.setState({ allowEditing: false });
+                // this.sendStatus(false);
             }
         }
     }
@@ -356,17 +359,17 @@ class Whiteboard extends React.Component {
                                         </div>
                                     </div>
                                     
-                                    <div className="col s3">
+                                    <div className="col s6 m3 l3">
                                         <p className="range-field">
                                             <label className="small-text">Brush Size </label>
                                             <input name="size" onChange={this.onChange} type="range" min="5" max="50" value={this.state.size}/>
                                         </p>
                                     </div>
-                                    <div className="col">
+                                    {/* <div className="col">
                                         <a className="color-grey" href="javascript:void(0);" onClick={() => this.goBack()} >
                                             <i className="material-icons right">undo</i> 
                                         </a>
-                                    </div>
+                                    </div> */}
                                     <div className="col s2">
                                         <p>
                                             <label className="small-text">

@@ -113,10 +113,8 @@ class CreateRoom extends Component {
                         this.setState({ storedUsername: username, errors });
                     }
 
-                    if (isEmpty(id)) {
+                    if (isEmpty(id) || id != res.data.owner) {
                         localStorage.setItem('id', res.data.owner)
-                    } else if (id != res.data.owner) {
-                        console.log('somethings wrong')
                     }
 
                     rooms.push(res.data._id);

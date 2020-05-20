@@ -33,6 +33,17 @@ const HOST = 'https://www.remotelearning.space'
 var streams = {};
 var hasReceived = false;
 
+// window.addEventListener("offline", function(event){
+//     console.log("You are now offline.");
+//     M.toast({html: 'Your connection has been lost', displayLength: 1000000, classes: 'red' })
+// });
+// window.addEventListener("online", function(event){
+//     console.log("You are now back online.");
+//     M.Toast.dismissAll();
+//     M.toast({html: "You're back online", displayLength: 5000, classes: 'green' })
+
+// });
+
 // peerConnection.onaddstream = async event => {
 //     console.log('stream received:', event.stream.id)
 //     console.log(globalUsers)
@@ -119,9 +130,8 @@ class CreateRoom extends Component {
         M.Tooltip.init(elems, {});
 
         if (!loading && !inValidId && !isEmpty(room)) {
-            let socket = io();
+            let socket = io.connect(window.location.origin);
 
-            console.log('socket', socket)
             // document.getElementById('remote').srcObject = remoteStream;
             this.setState({ socket }, () => userIsSet && this.socketEvents(socket));
         }
@@ -189,6 +199,7 @@ class CreateRoom extends Component {
         this.getParticipants(socket)
         this.nameChange(socket);
         this.leaveRoom(socket)
+        this.disconnected(socket);
 
         // socket.on("new-offer", async (offer, from, users) => {
         //     this.createRTCAnswer(offer, from, users)
@@ -203,6 +214,16 @@ class CreateRoom extends Component {
         // socket.on('get-offers', async users => {
         //     this.checkForNewOffers(users)
         // })
+    }
+
+    disconnected = socket => {
+        socket.on('disconnect', () => {
+            console.log('disconnected')
+            M.toast({html: 'Your connection has been lost', displayLength: 1000000, classes: 'red'})
+            setTimeout(() => {
+                window.location.reload()
+            }, 5000)
+        })
     }
 
     // getStream = async () => {
@@ -371,7 +392,7 @@ class CreateRoom extends Component {
                 if (id && id == res.data.room.owner) isOwner = true
                 console.log('isOwner', isOwner);
 
-                if (id == 'none' && res.data.userId) {
+                if (res.data.userId && res.data.userId != id) {
                     localStorage.setItem('id', res.data.userId)
                 }
 
@@ -774,7 +795,7 @@ class CreateRoom extends Component {
     }
 
     render() {
-        const { mobileScreen, showChallenges, username, roomEnded, answerSent, changeUsername, errors, room, socket, loading, inValidId, users, messages, userIsSet, isOwner, countDown, challenge, challengeStatus, challengeResults } = this.state;
+        const { mobileScreen, showChallenges, username, roomEnded, answerSent, disconnected, changeUsername, errors, room, socket, loading, inValidId, users, messages, userIsSet, isOwner, countDown, challenge, challengeStatus, challengeResults } = this.state;
 
         return (
             <div className="row">
@@ -832,9 +853,9 @@ class CreateRoom extends Component {
                                     { isOwner ? <Owner challenge={challenge} HOST={HOST} errors={errors} addChoice={this.addChoice} clearChallenge={this.clearChallenge} room={room} showChallenges={showChallenges} myId={socket && socket.id} users={users} countDown={countDown} challengeStatus={challengeStatus} selectChallenge={this.selectChallenge} onEditChallenge={this.onEditChallenge} startChallenge={this.startChallenge} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
                                         : <Participant challenge={challenge} errors={errors} answerSent={answerSent} sendAnswer={this.sendAnswer} myId={socket && socket.id} users={users} onEditChallenge={this.onEditChallenge} viewBoard={() => this.setState({ showChallenges: false })} countDown={countDown} challengeStatus={challengeStatus} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
                                     }
-                                    <div style={{ display: showChallenges ? 'none' : 'block'}}>
+                                   {socket &&  <div style={{ display: showChallenges ? 'none' : 'block'}}>
                                         <Whiteboard mobileScreen={mobileScreen} leaving={showChallenges ? 'yes' : 'no'} room={room} myId={socket} users={users} isOwner={isOwner} socket={socket} />
-                                    </div>
+                                    </div>}
                                     
                                 </div>
                             </div>

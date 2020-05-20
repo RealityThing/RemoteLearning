@@ -18,7 +18,7 @@ const RoomSchema = new Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     auto: true
-  },
+  }
 });
 
 module.exports = Room = mongoose.model('rooms', RoomSchema);

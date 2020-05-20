@@ -1,54 +1,43 @@
-// const mongoose = require('mongoose');
-// const Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-// // Create Schema
-// const UserSchema = new Schema({
-    
-//   first_name: {
-//     type: String,
-//     required: true,
-//     trim: true
-//   },
+// Create Schema
+const UserSchema = new Schema({
 
-//   last_name: {
-//     type: String,
-//     required: true,
-//     trim: true
-//   },
+  username: {
+    type: String,
+    trim: true
+  },
 
-//   email: {
-//     type: String,
-//     required: true,
-//     unique: true
-//   },
+  email: {
+    type: String
+  },
 
-//   password: {
-//     type: String,
-//     required: true
-//   },
+  password: {
+    type: String
+  },
 
-//   // educator or student
-//   status: {
-//     type: String,
-//     required: true
-//   },
+  // educator or student
+  status: {
+    type: String
+  },
 
-//   dateRegistered: {
-//     type: Date,
-//     default: Date.now
-//   },
+  dateRegistered: {
+    type: Date,
+    default: Date.now
+  },
 
-//   logins: {
-//     type: Number,
-//     default: 1
-//   },
+  logins: {
+    type: Number,
+    default: 1
+  },
 
-//   classes: [
-//     {
-//         type: Schema.Types.ObjectId,
-//         ref: 'rooms'
-//     }
-//   ]
-// });
+  rooms: [
+    {
+        type: Schema.Types.ObjectId,
+        ref: 'rooms'
+    }
+  ]
+});
 
-// module.exports = User = mongoose.model('users', UserSchema);
+module.exports = User = mongoose.model('users', UserSchema);

@@ -47,7 +47,8 @@ class Landing extends Component {
             .then(res => {
                 console.log(res.data);
                 this.setState({ loading: false })
-                if (id == 'none' && res.data.userId) {
+                
+                if (res.data.userId && res.data.userId != id) {
                     localStorage.setItem('id', res.data.userId)
                 }
                 this.props.history.push(`/room/${roomId}`)
