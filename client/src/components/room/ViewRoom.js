@@ -222,7 +222,7 @@ class CreateRoom extends Component {
             setTimeout(() => {
                 window.location.reload();
             //    this.reconnect();
-            }, 5000)
+            }, 3000)
         })
     }
 
@@ -817,95 +817,97 @@ class CreateRoom extends Component {
         const { mobileScreen, showChallenges, username, roomEnded, answerSent, disconnected, changeUsername, errors, room, socket, loading, inValidId, users, messages, userIsSet, isOwner, countDown, challenge, challengeStatus, challengeResults } = this.state;
 
         return (
-            <div className="row">
-                { loading ? <Spinner/> : inValidId ? 'Invalid ID' : !userIsSet || changeUsername ? (
-                    <ChangeUsername username={username} changeUsername={this.changeUsername} setUsername={this.setUsername} errors={errors} room={room} />
-                ) : roomEnded ? (
-                    <>
-                        { isOwner ? <p>You have closed the room.</p> : <p>Room has ended.</p>}
-                    </>
-                ) : (
-                    <div className="row">
-                        {/* Left column */}
-                        <div className="col s12 m8 l8 nav">
-                            <div className="row">
-                                <div className="col s12 m6 l6">
-                                    <h4>Room: {room.name}</h4>
-                                    <span>Hi {username} </span>
-                                    <div>
-                                        <a className="link-dash" onClick={() => {this.setState({ changeUsername: true });}} href="javascript:void(0);">Change username</a>
-                                    </div>
-                                   { isOwner && (
+            <div className="container">
+                <div className="row">
+                    { loading ? <Spinner/> : inValidId ? 'Invalid ID' : !userIsSet || changeUsername ? (
+                        <ChangeUsername username={username} changeUsername={this.changeUsername} setUsername={this.setUsername} errors={errors} room={room} />
+                    ) : roomEnded ? (
+                        <>
+                            { isOwner ? <p>You have closed the room.</p> : <p>Room has ended.</p>}
+                        </>
+                    ) : (
+                        <div className="view-room row">
+                            {/* Left column */}
+                            <div className="col s12 m8 l8 nav">
+                                <div className="row">
+                                    <div className="col s12 m6 l6">
+                                        <h4 className="roomTitle">Room: {room.name}</h4>
+                                        <span>Hi {username} </span>
                                         <div>
-                                            <a className="red-color link-dash" onClick={() => this.closeRoom()} href="javascript:void(0);">Close room</a>
+                                            <a className="link-dash" onClick={() => {this.setState({ changeUsername: true });}} href="javascript:void(0);">Change username</a>
                                         </div>
-                                   )}
-                                    <br/>
-                                    <span>Users: {eachKey(users).length}</span>
+                                    { isOwner && (
+                                            <div>
+                                                <a className="red-color link-dash" onClick={() => this.closeRoom()} href="javascript:void(0);">Close room</a>
+                                            </div>
+                                    )}
+                                        <br/>
+                                        <span>Users: {eachKey(users).length}</span>
+                                    </div>
+                                    { isOwner && challengeStatus !== 'start' && (
+                                    <>
+                                        <div className="col">
+                                            <div className="top-create-btn">
+                                                <a className="btn" onClick={() => {
+                                                        this.setState({ challengeStatus: 'wait', showChallenges: true });
+                                                    }}>
+                                                    <i className="material-icons right">add</i> 
+                                                    challenge
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div className="col">
+                                            <div className="top-create-btn">
+                                                <a className="btn whiteboardbtn" onClick={() => this.setState({ showChallenges: false })}>
+                                                    <i className="material-icons right">dashboard</i> 
+                                                    Whiteboard
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </>
+                                    )}
                                 </div>
-                                { isOwner && challengeStatus !== 'start' && (
-                                   <>
-                                    <div className="col">
-                                        <div className="top-create-btn">
-                                            <a className="btn" onClick={() => {
-                                                    this.setState({ challengeStatus: 'wait', showChallenges: true });
-                                                }}>
-                                                <i className="material-icons right">add</i> 
-                                                challenge
-                                            </a>
-                                        </div>
+
+                                <div className="row">
+                                    <div className="col s12 center">
+                                        { isOwner ? <Owner challenge={challenge} HOST={HOST} errors={errors} addChoice={this.addChoice} clearChallenge={this.clearChallenge} room={room} showChallenges={showChallenges} myId={socket && socket.id} users={users} countDown={countDown} challengeStatus={challengeStatus} selectChallenge={this.selectChallenge} onEditChallenge={this.onEditChallenge} startChallenge={this.startChallenge} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
+                                            : <Participant challenge={challenge} errors={errors} answerSent={answerSent} sendAnswer={this.sendAnswer} myId={socket && socket.id} users={users} onEditChallenge={this.onEditChallenge} viewBoard={() => this.setState({ showChallenges: false })} countDown={countDown} challengeStatus={challengeStatus} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
+                                        }
+                                    {socket &&  <div style={{ display: showChallenges ? 'none' : 'block'}}>
+                                            <Whiteboard mobileScreen={mobileScreen} leaving={showChallenges ? 'yes' : 'no'} room={room} myId={socket} users={users} isOwner={isOwner} socket={socket} />
+                                        </div>}
+                                        
                                     </div>
-                                    <div className="col">
-                                        <div className="top-create-btn">
-                                            <a className="btn whiteboardbtn" onClick={() => this.setState({ showChallenges: false })}>
-                                                <i className="material-icons right">dashboard</i> 
-                                                Whiteboard
-                                            </a>
-                                        </div>
-                                    </div>
-                                   </>
-                                )}
+                                </div>
                             </div>
 
-                            <div className="row">
-                                <div className="col s12 center">
-                                    { isOwner ? <Owner challenge={challenge} HOST={HOST} errors={errors} addChoice={this.addChoice} clearChallenge={this.clearChallenge} room={room} showChallenges={showChallenges} myId={socket && socket.id} users={users} countDown={countDown} challengeStatus={challengeStatus} selectChallenge={this.selectChallenge} onEditChallenge={this.onEditChallenge} startChallenge={this.startChallenge} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
-                                        : <Participant challenge={challenge} errors={errors} answerSent={answerSent} sendAnswer={this.sendAnswer} myId={socket && socket.id} users={users} onEditChallenge={this.onEditChallenge} viewBoard={() => this.setState({ showChallenges: false })} countDown={countDown} challengeStatus={challengeStatus} challengeResults={challengeResults} setChallengeStatus={this.setChallengeStatus} />
-                                    }
-                                   {socket &&  <div style={{ display: showChallenges ? 'none' : 'block'}}>
-                                        <Whiteboard mobileScreen={mobileScreen} leaving={showChallenges ? 'yes' : 'no'} room={room} myId={socket} users={users} isOwner={isOwner} socket={socket} />
-                                    </div>}
-                                    
+                            {/* Right column - messenger */}
+                            <div className="col s12 m4 l4">
+                                <div className="card-panel messenger">
+                                    <h5>Messenger</h5>
+                                    <div className="chat" id="chat">
+                                        { messages.map((message, i) => <div key={i} className="small-text">{message}</div>)}
+                                    </div>
+                        
+                                    <form noValidate onSubmit={this.sendMessage}>
+                                        <TextFieldGroup
+                                            type="text"
+                                            placeholder="Write a message"
+                                            name="message"
+                                            classes='input-text'
+                                            value={this.state.message}
+                                            onChange={this.typing}
+                                        />
+                                        <input type="submit" value="Send" className="btn btn-primary"/>
+                                    </form>
                                 </div>
+                                { room && <a href={`/room/${room._id}`} ><span className="small-text link-dash">Refresh room if you are experiencing issues.</span></a> }
+                                <br/>
+                                <Feedback top={true}/>
                             </div>
                         </div>
-
-                        {/* Right column - messenger */}
-                        <div className="col s12 m4 l4">
-                            <div className="card-panel messenger">
-                                <h5>Messenger</h5>
-                                <div className="chat" id="chat">
-                                    { messages.map((message, i) => <div key={i} className="small-text">{message}</div>)}
-                                </div>
-                    
-                                <form noValidate onSubmit={this.sendMessage}>
-                                    <TextFieldGroup
-                                        type="text"
-                                        placeholder="Write a message"
-                                        name="message"
-                                        classes='input-text'
-                                        value={this.state.message}
-                                        onChange={this.typing}
-                                    />
-                                    <input type="submit" value="Send" className="btn btn-primary"/>
-                                </form>
-                            </div>
-                            { room && <a href={`/room/${room._id}`} ><span className="small-text link-dash">Refresh room if you are experiencing issues.</span></a> }
-                            <br/>
-                            <Feedback top={true}/>
-                        </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
         )
     }

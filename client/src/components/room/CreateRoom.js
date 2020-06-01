@@ -93,7 +93,7 @@ class CreateRoom extends Component {
 
         let c = getCharNWordsCount(username);
 
-        if (isEmpty(username) || c && c.chars < 7 || c.words < 2) {
+        if (isEmpty(username) || c && c.chars < 4 || c.words < 2) {
             errors.username = 'Please enter your full name'
             this.setState({ errors })
         }
@@ -137,49 +137,51 @@ class CreateRoom extends Component {
         const { errors, username, room, loading } = this.state;
 
         return (
-            <div className="login landing">
-                <div className="container">
-                    <div className="row">
-                        <div className="col-md-8 m-auto">
-                            <div className="center">
-                                <img src={logo} className="logo"/>
-                            </div>
-                            <form noValidate onSubmit={this.onSubmit}>
-                                
-                                <div className="row">
-                                    <div className="col s12 m0 l3"/>
-                                    <div className="col s12 m6 l3">
-                                        <TextFieldGroup
-                                            type="text"
-                                            placeholder="Full Name"
-                                            info="This will be shown to the students"
-                                            name="username"
-                                            value={username}
-                                            onChange={e => this.setState({ username: e.target.value })}
-                                            error={errors.username}
-                                        /> 
-                                    </div>
-                                
-                                    <div className="col s12 m6 l3">
-                                        <TextFieldGroup
-                                            type="text"
-                                            placeholder="Class Name"
-                                            info="e.g CS-101-Class1"
-                                            name="room"
-                                            value={room}
-                                            onChange={this.onChange}
-                                            error={errors.room}
-                                        />
-                                    </div>
-
-                                    <div className="col btnt">
-                                        <input type="submit" value="Create" className="btn btn-info btn-block mt-4"/>
-                                    </div>
+            <div className="container">
+                <div className="login landing">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-8 m-auto">
+                                <div className="center">
+                                    <img src={logo} className="logo"/>
                                 </div>
-                            </form>
-                            <div className="row">
-                                <div className="col">
-                                    { loading && <Spinner/>}
+                                <form noValidate onSubmit={this.onSubmit}>
+                                    
+                                    <div className="row">
+                                        <div className="col s12 m0 l3"/>
+                                        <div className="col s12 m6 l3">
+                                            <TextFieldGroup
+                                                type="text"
+                                                placeholder="Full Name"
+                                                info="This will be shown to the students"
+                                                name="username"
+                                                value={username}
+                                                onChange={e => this.setState({ username: e.target.value })}
+                                                error={errors.username}
+                                            /> 
+                                        </div>
+                                    
+                                        <div className="col s12 m6 l3">
+                                            <TextFieldGroup
+                                                type="text"
+                                                placeholder="Class Name"
+                                                info="e.g CS-101-Class1"
+                                                name="room"
+                                                value={room}
+                                                onChange={this.onChange}
+                                                error={errors.room}
+                                            />
+                                        </div>
+
+                                        <div className="col btnt">
+                                            <input type="submit" value="Create" className="btn btn-info btn-block mt-4"/>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div className="row">
+                                    <div className="col">
+                                        { loading && <Spinner/>}
+                                    </div>
                                 </div>
                             </div>
                         </div>

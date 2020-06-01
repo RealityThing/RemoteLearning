@@ -52,7 +52,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router>
-          <div className='App container'>
+          <div className='App'>
             <Route exact path='/' component={Landing} />
             <Route exact path='/create' component={CreateRoom} />
             <Route exact path='/room/:id' component={ViewRoom} />

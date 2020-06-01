@@ -10,17 +10,67 @@ body {
     margin: 0 0 100px;
 }
 
+.enterRoombtn {
+    color: #55aae6 !important;
+    background-color: white !important;
+    margin-right: 15px;
+}
+
+.create-challenges-section { 
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.logo {
+    margin-bottom: -50px;
+}
+
+.roomTitle {
+    padding-bottom: 5px;
+}
+
+.join-room-modal {
+    width: 30%;
+}
+.view-room {
+    padding-top: 25px;
+}
+
+.btn-t {
+    margin-top: 20px;
+}
+
 @media only screen and (max-width : 600px) {
     .logo {
         width: 300px;
+        margin-bottom: 0 !important;
     }
 
+    .join-room-modal {
+        width: 75%;
+    }
+
+    .btn-t {
+        margin-top: 0px !important;
+    }
     .footer-text {
         font-size: 10px !important
     }
 
+    .whiteboard-image {
+        padding-bottom: 15px !important;
+    }
+
+    .whiteboard-image-bottom {
+        padding-top: 15px !important;
+    }
     .link-text {
         font-size: 10px !important;
+    }
+
+    .join-a-room-btn {
+        margin-right: 0 !important;
+        margin-bottom: 15px;
     }
 }
 @media only screen and (max-width : 780px) {
@@ -31,6 +81,10 @@ body {
 
 .wrap-text {
     word-wrap: break-word;
+}
+
+.join-a-room-btn {
+    margin-right: 15px;
 }
 
 .footer {
@@ -183,8 +237,12 @@ span, p {
     margin-top: 50px;
 }
 
-.video-player {
-    margin-top: -35px;
+.video-containert{
+    padding-top: 100px;
+}
+
+.heading-demo {
+    margin-bottom: 15px;
 }
 .info-msg {
     margin-bottom: 35px;

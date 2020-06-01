@@ -53,7 +53,7 @@ class Footer extends Component {
     render() {
         return (
             <>
-                <a className="white-text modal-trigger" href="#modal1"><span className={`footer-text small-text ${this.props.top ? 'red-text' : 'report-issue'}`}>Report issue</span></a>
+                <a className="white-text modal-trigger" href="#modal1"><span className={`${this.props.top ? 'red-text footer-text small-text ' : this.props.feedback ? 'red-text' : 'report-issue footer-text small-text'}`}>{this.props.feedback ? 'Send' : 'Report issue'}</span></a>
 
                 <div id="modal1" className="modal">
                 <div className="modal-content">
@@ -78,7 +78,7 @@ class Footer extends Component {
                             onChange={e => this.setState({ email: e.target.value })}
                         />
 
-                        <input type="submit" className="btn teal lighten-2" value="Submit"/>
+                        <input type="submit" className="btn lighten-2" value="Submit"/>
 
                     </form>
                 </div>
