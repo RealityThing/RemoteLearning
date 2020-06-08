@@ -83,7 +83,7 @@ class Landing extends Component {
                                 <div className="hero-content">
                                     <img src={logo} className="logo"/>
                                     <p>Easily collaborate with others through a digital whiteboard.</p>
-                                    <iframe className="video-player" width="650" height="390" src="https://www.youtube.com/embed/I_4kEnfrUD0?controls=0showinfo=0&relo=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    <iframe className="video-player" width="650" height="390" src="https://www.youtube.com/embed/cfuT_sv0Sj0?controls=0showinfo=0&relo=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
                                 </div>
                                 </div>
