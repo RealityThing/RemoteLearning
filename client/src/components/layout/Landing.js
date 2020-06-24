@@ -82,9 +82,8 @@ class Landing extends Component {
                                 <div className="col l8 xl7">
                                 <div className="hero-content">
                                     <img src={logo} className="logo"/>
-                                    <p>Easily collaborate with others through a digital whiteboard.</p>
+                                    <h6 className="headtop">Teach students just like in a classroom, but remotely.</h6>
                                     <iframe className="video-player" width="650" height="390" src="https://www.youtube.com/embed/cfuT_sv0Sj0?controls=0showinfo=0&relo=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
                                 </div>
                                 </div>
                                 
@@ -179,6 +178,7 @@ class Landing extends Component {
                                         </div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>
