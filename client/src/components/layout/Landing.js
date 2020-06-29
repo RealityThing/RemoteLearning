@@ -82,7 +82,7 @@ class Landing extends Component {
                                 <div className="col l8 xl7">
                                 <div className="hero-content">
                                     <img src={logo} className="logo"/>
-                                    <h6 className="headtop">Teach students just like in a classroom, but remotely.</h6>
+                                    <h6 className="headtop"><span>Online Teaching Made Easier.</span></h6>
                                     <iframe className="video-player" width="650" height="390" src="https://www.youtube.com/embed/cfuT_sv0Sj0?controls=0showinfo=0&relo=0&modestbranding=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                 </div>
                                 </div>
