@@ -29,6 +29,7 @@ import Register from './components/account/Register';
 import CreateRoom from './components/room/CreateRoom';
 import ViewRoom from './components/room/ViewRoom';
 import Footer from './components/layout/Footer';
+import ReactGA from 'react-ga';
 
 // Check for token
 if (localStorage.jwtToken) {
@@ -46,6 +47,9 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = { displayFooter: false }
+
+    const trackingId = "UA-166221182-2";
+    ReactGA.initialize(trackingId);
   }
 
   render() {

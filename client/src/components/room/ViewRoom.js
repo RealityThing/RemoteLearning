@@ -17,6 +17,7 @@ import M from 'materialize-css';
 import ChangeUsername from './ChangeUsername';
 import Whiteboard from '../whiteboard/Whiteboard';
 import Feedback from '../layout/Feedback'
+import ReactGA from 'react-ga';
 
 // const configuration = {'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]}
 // var peerConnection = new RTCPeerConnection(configuration)
@@ -115,6 +116,9 @@ class CreateRoom extends Component {
     }
 
     componentWillMount() {
+        ReactGA.set({ page: window.location.pathname + window.location.search });
+        ReactGA.pageview(window.location.pathname + window.location.search);
+
         let isMobile = window.matchMedia("only screen and (max-width: 600px)").matches;
 
         if (isMobile) {

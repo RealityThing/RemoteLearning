@@ -9,6 +9,7 @@ import '../../styles/main.css'
 import logo from '../../assets/logo.png'
 import Spinner from '../layout/Spinner';
 import Feedback from './Feedback'
+import ReactGA from 'react-ga';
 
 import '../../styles/meanmenu.css'
 import '../../styles/settings.css'
@@ -30,10 +31,18 @@ class Landing extends Component {
     }
 
     componentDidMount() {
+        ReactGA.set({ page: window.location.pathname + window.location.search });
+        ReactGA.pageview(window.location.pathname + window.location.search);
         let id = localStorage.getItem('id')
         if (!isEmpty(id)) this.setState({ id })
     }
 
+    joinaRoomEvent = () => {
+        ReactGA.event({
+            category: 'join',
+            action: 'User is trying to join a room via ID'
+        })
+    }
     onSubmit = e => {
         e.preventDefault();
         let { roomId, id } = this.state;
@@ -231,7 +240,7 @@ class Landing extends Component {
                                 <div className="subscription-form center">
                                     <h2 className="heading-demo">Try It Out!</h2>
                                     <div className="call-action">
-                                        <a href="#join-room" className="btn btn-landing green btn-lg btn-block join-a-room-btn mt-4 modal-trigger">
+                                        <a href="#join-room" onClick={() => this.joinaRoomEvent()} className="btn btn-landing green btn-lg btn-block join-a-room-btn mt-4 modal-trigger">
                                             <i style={{ marginRight: 5 }} className="fas fa-users"></i>
                                             Join A Room
                                         </a>

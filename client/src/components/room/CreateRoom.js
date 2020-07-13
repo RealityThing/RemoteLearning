@@ -9,6 +9,7 @@ import '../../styles/main.css'
 import { getCharNWordsCount, eachKey } from '../../utils/valueHelpers';
 import logo from '../../assets/logo.png'
 import Spinner from '../layout/Spinner';
+import ReactGA from 'react-ga';
 
 // Custom react component/class
 class CreateRoom extends Component {
@@ -28,6 +29,9 @@ class CreateRoom extends Component {
     }
 
     componentWillMount = async () => {
+        ReactGA.set({ page: window.location.pathname + window.location.search });
+        ReactGA.pageview(window.location.pathname + window.location.search);
+
         let id = localStorage.getItem('id')
         let username = localStorage.getItem('username')
         let rooms = localStorage.getItem('rooms');

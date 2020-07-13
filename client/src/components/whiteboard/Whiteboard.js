@@ -2,6 +2,7 @@ import React from 'react'
 import '../../styles/whiteboard.css'
 import M from 'materialize-css';
 import isEmpty from '../../utils/is-empty';
+import ReactGA from 'react-ga';
 
 const canvasWidth = 1500;
 const canvasHeight = 1000;
@@ -271,6 +272,11 @@ class Whiteboard extends React.Component {
         if (e) e.preventDefault();
         if (!this.isAuthorized()) return;
         let { drawing } = this.state;
+
+        ReactGA.event({
+            category: 'draw',
+            action: 'User is using the board'
+        })
 
         this.setState({ lastX: null, lastY: null })
         // if (drawing.length && drawing[-1] !== 'start' && drawing[-1] !== 'end') this.setState({ drawing: [...drawing, 'end'], strokeStarted: false });
