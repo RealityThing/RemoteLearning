@@ -271,7 +271,6 @@ class Whiteboard extends React.Component {
     onRelease = (e=false) => {
         if (e) e.preventDefault();
         if (!this.isAuthorized()) return;
-        let { drawing } = this.state;
 
         ReactGA.event({
             category: 'draw',

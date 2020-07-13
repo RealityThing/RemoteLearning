@@ -38,6 +38,7 @@ class Landing extends Component {
     }
 
     joinaRoomEvent = () => {
+        console.log('join')
         ReactGA.event({
             category: 'join',
             action: 'User is trying to join a room via ID'
@@ -99,7 +100,7 @@ class Landing extends Component {
                                 <div className="col l7 xl6">
                                     <div className="subscription-form">
                                         <div className="call-action">
-                                            <a href="#join-room" className="btn btn-landing green btn-lg btn-block join-a-room-btn mt-4 modal-trigger">
+                                            <a href="#join-room"  onClick={() => this.joinaRoomEvent()} className="btn btn-landing green btn-lg btn-block join-a-room-btn mt-4 modal-trigger">
                                                 <i style={{ marginRight: 5 }} className="fas fa-users"></i>
                                                 Join A Room
                                             </a>
@@ -240,7 +241,7 @@ class Landing extends Component {
                                 <div className="subscription-form center">
                                     <h2 className="heading-demo">Try It Out!</h2>
                                     <div className="call-action">
-                                        <a href="#join-room" onClick={() => this.joinaRoomEvent()} className="btn btn-landing green btn-lg btn-block join-a-room-btn mt-4 modal-trigger">
+                                        <a href="#join-room" className="btn btn-landing green btn-lg btn-block join-a-room-btn mt-4 modal-trigger">
                                             <i style={{ marginRight: 5 }} className="fas fa-users"></i>
                                             Join A Room
                                         </a>
