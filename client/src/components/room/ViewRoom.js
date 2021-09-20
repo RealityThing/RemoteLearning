@@ -30,7 +30,7 @@ import ReactGA from 'react-ga';
         streamId
     }
 */
-const HOST = 'https://www.remotelearning.space'
+const HOST = 'https://remotelearning.herokuapp.com'
 var streams = {};
 var hasReceived = false;
 

@@ -15,9 +15,9 @@ export default () => {
                 <span className="footer-text small-text">@ 2020 Remote Learning </span>
             ): null }
             
-            <div className="right">
+            {/* <div className="right">
                 <a className="white-text" target="_blank" href="https://realitything.com/"><span className="footer-text small-text"> Developed by <b>RealityThing</b> </span></a>
-            </div>
+            </div> */}
         </div>
         </>
     )
