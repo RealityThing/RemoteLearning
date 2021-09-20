@@ -11,13 +11,9 @@ export default () => {
                 <Feedback/>
             </div>
             
-            {!window.matchMedia("only screen and (max-width: 600px)").matches ? (
+            <div className="right">
                 <span className="footer-text small-text">@ 2020 Remote Learning </span>
-            ): null }
-            
-            {/* <div className="right">
-                <a className="white-text" target="_blank" href="https://realitything.com/"><span className="footer-text small-text"> Developed by <b>RealityThing</b> </span></a>
-            </div> */}
+            </div>
         </div>
         </>
     )
